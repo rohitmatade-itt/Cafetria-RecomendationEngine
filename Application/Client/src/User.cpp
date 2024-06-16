@@ -85,3 +85,11 @@ void User::displayMenu() const {
     std::cout << "Displaying Menu..." << std::endl << std::endl;
     // TODO: fetch menu from database and display
 }
+
+void User::viewSpecificDateMenu() const {
+    std::cout << "Viewing Specific Date Menu..." << std::endl;
+    std::string date;
+    std::cout << "Enter the date for which you want to view the menu(YYYY-MM-DD): ";
+    std::cin >> date;
+    
+}

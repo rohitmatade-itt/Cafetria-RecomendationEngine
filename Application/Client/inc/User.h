@@ -31,6 +31,7 @@ public:
     void displayUserInfo() const;
     void userWelcome() const;
     void displayMenu() const;
+    void viewSpecificDateMenu() const;
 };
 
 #endif // USER_H

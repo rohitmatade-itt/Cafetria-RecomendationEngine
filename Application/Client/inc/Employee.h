@@ -9,6 +9,11 @@ public:
     Employee(const std::string& user_name, const std::string& first_name, const std::string& last_name, const std::string& employee_id);
 
     //Employee specific functions
+    void employeeLandingPage();
+    void getNotificationIfAny();
+    void getRecomondation();
+    void giveVote();
+    void giveFeedback();
 };
 
 #endif // EMPLOYEE_H
