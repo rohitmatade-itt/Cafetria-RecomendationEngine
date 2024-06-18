@@ -81,11 +81,6 @@ bool Admin::addEmployee() {
     std::cout << "Last Name: ";
     std::getline(std::cin, last_name);
 
-    if (last_name.empty()) {
-        last_name = "";
-    }
-    std::cout << "Last Name entered: " << last_name << std::endl;
-
     User employee(user_name, first_name, last_name, employee_id);
 
     return true;
