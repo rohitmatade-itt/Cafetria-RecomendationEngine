@@ -5,10 +5,6 @@
 
 class Chef : public User {
 public:
-    // Chef();
-    // Chef(const std::string& user_name, const std::string& first_name, const std::string& last_name, const std::string& employee_id);
-
-    //Chef specific functions
     void chefLandingPage();
     void getNotificationIfAny();
     void getRecomondationForTomorrow();

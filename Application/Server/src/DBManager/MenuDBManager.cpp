@@ -1,4 +1,5 @@
 #include "MenuDBManager.h"
+#include <sstream>
 
 std::vector<std::string> MenuDBManager::getAllItemsName() {
     std::vector<std::string> menu_list;
@@ -8,4 +9,35 @@ std::vector<std::string> MenuDBManager::getAllItemsName() {
         menu_list.push_back(row[0]);
     }
     return menu_list;
+}
+
+std::string MenuDBManager::addMenuItem(std::string item_details) {
+    std::vector<std::string> item_elements;
+    std::stringstream ss(item_details);
+    std::string element;
+
+    while (std::getline(ss, element, '\t')) {
+        item_elements.push_back(element);
+    }
+
+    std::string query = "INSERT INTO Menu (item_name, cost_price, selling_price, is_available) VALUES ('" +
+                        item_elements[0] + "', " +
+                        std::to_string(std::stof(item_elements[1])) + ", '" +
+                        std::to_string(std::stof(item_elements[2])) + "', '" +
+                        std::to_string(std::stoi(item_elements[3])) + "')";
+
+    if (dbManager.executeUpdate(query)) {
+        return "Item added successfully";
+    } else {
+        return "Failed to add item";
+    }
+}
+
+std::string MenuDBManager::removeMenuItem(std::string item_name) {
+    std::string query = "DELETE FROM Menu WHERE item_name = '" + item_name + "'";
+    if (dbManager.executeUpdate(query)) {
+        return "Item removed successfully";
+    } else {
+        return "Failed to remove item";
+    }
 }

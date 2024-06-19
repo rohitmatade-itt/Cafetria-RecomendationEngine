@@ -95,27 +95,3 @@ SocketRequest ServerSocket::parseMessage(const std::string& message) {
 
     return {requestType, actualMessage};
 }
-
-
-// void ServerSocket::handleMessage(const std::string& message) {
-//     try {
-//         SocketRequest request = parseMessage(message);
-//         std::cout << "Parsed request type: " << request.requestType << ", message: " << request.message << std::endl;
-//         // Handle the message based on request type
-//     } catch (const std::invalid_argument& e) {
-//         std::cerr << "Failed to handle message: " << e.what() << std::endl;
-//     }
-// }
-
-// void ServerSocket::receiveAndHandleMessages() {
-//     while (true) {
-//         std::string message = receiveMessage();
-//         if (message.empty()) {
-//             std::cerr << "Empty message received. Closing connection." << std::endl;
-//             break;
-//         }
-//         handleMessage(message);
-
-        
-//     }
-// }

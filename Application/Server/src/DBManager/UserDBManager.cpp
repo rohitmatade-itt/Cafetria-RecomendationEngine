@@ -1,14 +1,31 @@
 #include "UserDBManager.h"
 
-bool UserDBManager::addUser(const std::string& userName, const std::string& firstName, const std::string& lastName, const std::string& employeeId) {
-    std::string query = "INSERT INTO User (user_name, first_name, last_name, employee_id) "
-                       "VALUES ('" + userName + "', '" + firstName + "', '" + lastName + "', '" + employeeId + "')";
-    return dbManager.executeUpdate(query);
+#include <sstream>
+
+
+std::string UserDBManager::addUser(std::string user_details) {
+    std::vector<std::string> user_elements;
+    std::stringstream ss(user_details);
+    std::string element;
+
+    while (std::getline(ss, element, '\t')) {
+        user_elements.push_back(element);
+    }
+
+    std::string query = "INSERT INTO User (user_name, first_name, last_name, employee_id) VALUES ('" +
+                        user_elements[0] + "', '" +
+                        user_elements[1] + "', '" +
+                        user_elements[2] + "', '" +
+                        user_elements[3] + "')";
+
+    dbManager.executeUpdate(query);
+    return "User added successfully";
 }
 
-bool UserDBManager::removeUser(const std::string& userName) {
+std::string UserDBManager::removeUser(std::string userName) {
     std::string query = "DELETE FROM User WHERE user_name = '" + userName + "'";
-    return dbManager.executeUpdate(query);
+    dbManager.executeUpdate(query);
+    return "User removed successfully";
 }
 
 std::string UserDBManager::getFirstName(const std::string& userName) {

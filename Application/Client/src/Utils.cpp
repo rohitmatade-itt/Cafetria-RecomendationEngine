@@ -9,9 +9,9 @@ namespace Utils {
 
         for (int index = 0; index < menuOptions.size(); ++index) {
             if (index == selectedOption) {
-                attron(A_REVERSE); // Turn on reverse attribute
+                attron(A_REVERSE);
                 printw("-> %s\n", menuOptions[index].c_str());
-                attroff(A_REVERSE); // Turn off reverse attribute
+                attroff(A_REVERSE);
             } else {
                 printw("   %s\n", menuOptions[index].c_str());
             }
@@ -40,14 +40,14 @@ namespace Utils {
                     displayOptions(menuOptions, selectedOption);
                     break;
                 case '\n':
-                    endwin(); // Exit ncurses mode
+                    endwin();
                     return selectedOption;
                 default:
                     break;
             }
         }
 
-        return -1; // Return an invalid index if the loop somehow exits
+        return -1;
     }
 
     std::vector<std::string> splitStringbyTab(std::string str) {

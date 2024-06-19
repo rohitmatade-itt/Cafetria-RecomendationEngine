@@ -5,8 +5,8 @@
 
 class UserDBManager {
 public:
-    bool addUser(const std::string& userName, const std::string& firstName, const std::string& lastName, const std::string& employeeId);
-    bool removeUser(const std::string& userName);
+    std::string addUser(std::string userName);
+    std::string removeUser(std::string userName);
     std::string getFirstName(const std::string& userName);
     std::string getLastName(const std::string& userName);
     std::string getEmployeeId(const std::string& userName);
