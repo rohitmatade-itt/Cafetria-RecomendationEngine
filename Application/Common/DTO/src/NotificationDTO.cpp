@@ -27,7 +27,7 @@ void NotificationDTO::notificationDTO_deserialiser(std::string serialised_notifi
         switch (static_cast<NotificationDTOField>(fieldIndex))
         {
         case NotificationDTOField::NotificationID:
-            notification_id = !token.empty() ? std::stoi(token) : 0;
+            notification_id = !token.empty() ? static_cast<int>(token[0]) : 0;
             break;
         case NotificationDTOField::UserName:
             user_name = !token.empty() ? token : "";
@@ -39,7 +39,7 @@ void NotificationDTO::notificationDTO_deserialiser(std::string serialised_notifi
             message = !token.empty() ? token : "";
             break;
         case NotificationDTOField::ReadReceipt:
-            read_receipt = !token.empty() ? std::stoi(token) : 0;
+            read_receipt = !token.empty() ? static_cast<int>(token[0]) : 0;
             break;
         default:
             break;

@@ -1,4 +1,5 @@
 #include <iostream>
+#include <string>
 
 #include "UserDTO.h"
 
@@ -10,15 +11,20 @@ enum class UserDTOField {
     EmployeeID
 };
 
-std::string UserDTO::userDTO_serialiser()
+std::string UserDTO::serialiser()
 {
     std::string serialised_user;
-    serialised_user = user_name + "\t" + first_name + "\t" + last_name + "\t" + std::to_string(user_type) + "\t" + employee_id;
+
+    serialised_user += !user_name.empty() ? user_name + "\t" : "\t";
+    serialised_user += !first_name.empty() ? first_name + "\t" : "\t";
+    serialised_user += !last_name.empty() ? last_name + "\t" : "\t";
+    serialised_user += !(user_type == 0) ? std::to_string(user_type) + "\t" : "\t";
+    serialised_user += !employee_id.empty() ? employee_id + "\t" : "\t";
+
     return serialised_user;
 }
 
-
-void UserDTO::userDTO_deserialiser(std::string serialised_user)
+void UserDTO::deserialiser(std::string serialised_user)
 {
     std::string delimiter = "\t";
     size_t pos = 0;
@@ -39,7 +45,7 @@ void UserDTO::userDTO_deserialiser(std::string serialised_user)
             last_name = !token.empty() ? token : "";
             break;
         case UserDTOField::UserType:
-            user_type = !token.empty() ? std::stoi(token) : 0;
+            user_type = !token.empty() ? static_cast<int>(token[0]) : 0;
             break;
         case UserDTOField::EmployeeID:
             employee_id = !token.empty() ? token : "";

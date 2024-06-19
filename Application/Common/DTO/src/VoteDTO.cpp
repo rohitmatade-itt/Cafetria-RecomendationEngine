@@ -27,10 +27,10 @@ void VoteDTO::voteDTO_deserialiser(std::string serialised_vote)
         switch (static_cast<VoteDTOField>(fieldIndex))
         {
         case VoteDTOField::VoteID:
-            vote_id = !token.empty() ? std::stoi(token) : 0;
+            vote_id = !token.empty() ? static_cast<int>(token[0]) : 0;
             break;
         case VoteDTOField::ItemID:
-            item_id = !token.empty() ? std::stoi(token) : 0;
+            item_id = !token.empty() ? static_cast<int>(token[0]) : 0;
             break;
         case VoteDTOField::UserName:
             user_name = !token.empty() ? token : "";
@@ -39,7 +39,7 @@ void VoteDTO::voteDTO_deserialiser(std::string serialised_vote)
             date = !token.empty() ? token : "";
             break;
         case VoteDTOField::Status:
-            status = !token.empty() ? std::stoi(token) : 0;
+            status = !token.empty() ? static_cast<int>(token[0]) : 0;
             break;
         default:
             break;

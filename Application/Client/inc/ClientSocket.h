@@ -1,20 +1,21 @@
 #ifndef CLIENTSOCKET_H
 #define CLIENTSOCKET_H
 
-#include <arpa/inet.h>
+#include <string>
+#include <netinet/in.h>
 
 class ClientSocket {
 public:
-    ClientSocket(const char* ipAddress, int port);
+    ClientSocket();
     ~ClientSocket();
-    void sendMessage(const std::string& message);
+    void sendMessage(const int& requestType, const std::string& message);
     std::string receiveMessage();
 
 private:
-    int clientSocket;
-    struct sockaddr_in serverAddress;
     const char* ipAddress;
     int port;
+    int clientSocket;
+    struct sockaddr_in serverAddress;
 
     void createSocket();
     void connectToServer();

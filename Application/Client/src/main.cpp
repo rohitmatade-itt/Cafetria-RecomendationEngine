@@ -13,16 +13,26 @@ int main() {
     std::cout << "                   ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛" << std::endl;
     std::cout << "\033[0m";
 
-    // User user;
-    // user.userLogin();
+    User user;
+    std::string login_status = user.userLogin();
 
-    //User is authenticated
-    //Based on user type, create object of Admin, Chef or Employee
-    //Call the respective landing page function
-
-    // if (userType == "Admin")
-    Admin admin;
-    admin.adminLandingPage();
+    auto user_type = Utils::splitStringbyTab(login_status)[1];
+    
+    if (user_type == "Employee") {
+        Employee employee;
+        employee.userWelcome();
+        employee.employeeLandingPage();
+    } else if (user_type == "Chef") {
+        Chef chef;
+        chef.userWelcome();
+        chef.chefLandingPage();
+    } else if (user_type == "Admin") {
+        Admin admin;
+        admin.userWelcome();
+        admin.adminLandingPage();
+    } else {
+        std::cout << "Invalid user type!" << std::endl;
+    }
     
     return 0;
 }

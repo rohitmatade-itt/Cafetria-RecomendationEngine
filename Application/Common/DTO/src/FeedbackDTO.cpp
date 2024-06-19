@@ -31,10 +31,10 @@ void FeedbackDTO::feedbackDTO_deserialiser(std::string serialised_feedback)
         switch (static_cast<FeedbackDTOField>(fieldIndex))
         {
         case FeedbackDTOField::FeedbackID:
-            feedback_id = !token.empty() ? std::stoi(token) : 0;
+            feedback_id = !token.empty() ? static_cast<int>(token[0]) : 0;
             break;
         case FeedbackDTOField::ItemID:
-            item_id = !token.empty() ? std::stoi(token) : 0;
+            item_id = !token.empty() ? static_cast<int>(token[0]) : 0;
             break;
         case FeedbackDTOField::UserName:
             user_name = !token.empty() ? token : "";
@@ -43,13 +43,13 @@ void FeedbackDTO::feedbackDTO_deserialiser(std::string serialised_feedback)
             date = !token.empty() ? token : "";
             break;
         case FeedbackDTOField::TasteRating:
-            taste_rating = !token.empty() ? std::stoi(token) : 0;
+            taste_rating = !token.empty() ? static_cast<int>(token[0]) : 0;
             break;
         case FeedbackDTOField::QuantityRating:
-            quantity_rating = !token.empty() ? std::stoi(token) : 0;
+            quantity_rating = !token.empty() ? static_cast<int>(token[0]) : 0;
             break;
         case FeedbackDTOField::OverallRating:
-            overall_rating = !token.empty() ? std::stoi(token) : 0;
+            overall_rating = !token.empty() ? static_cast<int>(token[0]) : 0;
             break;
         case FeedbackDTOField::Comment:
             comment = !token.empty() ? token : "";

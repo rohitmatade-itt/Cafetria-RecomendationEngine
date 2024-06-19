@@ -25,10 +25,10 @@ void RolloutMenuDTO::rolloutMenuDTO_deserialiser(std::string serialised_rollout_
         switch (static_cast<RolloutMenuDTOField>(fieldIndex))
         {
         case RolloutMenuDTOField::ItemID:
-            item_id = !token.empty() ? std::stoi(token) : 0;
+            item_id = !token.empty() ? static_cast<int>(token[0]) : 0;
             break;
         case RolloutMenuDTOField::MealType:
-            meal_type = !token.empty() ? std::stoi(token) : 0;
+            meal_type = !token.empty() ? static_cast<int>(token[0]) : 0;
             break;
         case RolloutMenuDTOField::RolloutDate:
             rollout_date = !token.empty() ? token : "";

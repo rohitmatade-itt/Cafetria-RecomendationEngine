@@ -27,7 +27,7 @@ void MenuDTO::menuDTO_deserialiser(std::string serialised_menu)
         switch (static_cast<MenuDTOField>(fieldIndex))
         {
         case MenuDTOField::ItemID:
-            item_id = !token.empty() ? std::stoi(token) : 0;
+            item_id = !token.empty() ? static_cast<int>(token[0]) : 0;
             break;
         case MenuDTOField::ItemName:
             item_name = !token.empty() ? token : "";
@@ -39,7 +39,7 @@ void MenuDTO::menuDTO_deserialiser(std::string serialised_menu)
             selling_price = !token.empty() ? std::stod(token) : 0.0;
             break;
         case MenuDTOField::IsAvailable:
-            is_available = !token.empty() ? std::stoi(token) : 0;
+            is_available = !token.empty() ? static_cast<int>(token[0]) : 0;
             break;
         default:
             break;

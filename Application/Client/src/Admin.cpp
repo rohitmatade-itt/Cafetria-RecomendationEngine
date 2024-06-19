@@ -4,6 +4,7 @@
 #include "Admin.h"
 #include "User.h"
 #include "Utils.h"
+#include "ClientSocket.h"
 
 enum class AdminOptions {
     DISPLAY_MENU,
@@ -15,15 +16,6 @@ enum class AdminOptions {
     REMOVE_EMPLOYEE,
     LOGOUT
 };
-
-Admin::Admin() {
-    std::cout << "Admin Constructor" << std::endl;
-}
-
-Admin::Admin(const std::string& user_name, const std::string& first_name, const std::string& last_name, const std::string& employee_id)
-    : User(user_name, first_name, last_name, employee_id) {
-    std::cout << "Admin Parameterized Constructor" << std::endl;
-}
 
 void Admin::adminLandingPage() {
 
@@ -81,8 +73,14 @@ bool Admin::addEmployee() {
     std::cout << "Last Name: ";
     std::getline(std::cin, last_name);
 
-    User employee(user_name, first_name, last_name, employee_id);
-
+    ClientSocket clientSocket;
+    clientSocket.sendMessage(static_cast<int>(RequestType::ADD_EMPLOYEE_REQUEST), user_name + "\t" + first_name + "\t" + last_name + "\t" + employee_id);
+    std::string add_employee_status = clientSocket.receiveMessage();
+    if(add_employee_status == "Employee Added Successfully") {
+        std::cout << "Employee " << first_name << " Added Successfully" << std::endl;
+    } else {
+        std::cout << "Error Adding Employee" << std::endl;
+    }
     return true;
 }
 

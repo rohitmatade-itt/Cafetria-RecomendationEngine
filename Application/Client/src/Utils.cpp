@@ -49,4 +49,16 @@ namespace Utils {
 
         return -1; // Return an invalid index if the loop somehow exits
     }
+
+    std::vector<std::string> splitStringbyTab(std::string str) {
+        std::vector<std::string> result;
+        std::stringstream ss(str);
+        std::string token;
+        
+        while (std::getline(ss, token, '\t')) {
+            result.push_back(token);
+        }
+        
+        return result;
+    }
 }

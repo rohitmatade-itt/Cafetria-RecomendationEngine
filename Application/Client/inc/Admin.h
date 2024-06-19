@@ -5,8 +5,8 @@
 
 class Admin : public User {
 public:
-    Admin();
-    Admin(const std::string& user_name, const std::string& first_name, const std::string& last_name, const std::string& employee_id);
+    // Admin();
+    // Admin(const std::string& user_name, const std::string& first_name, const std::string& last_name, const std::string& employee_id);
 
     //Admin specific functions
     void adminLandingPage();

@@ -1,10 +1,12 @@
+#include "ClientSocket.h"
 #include <iostream>
 #include <cstring>
 #include <unistd.h>
+#include <arpa/inet.h>
 
-#include "ClientSocket.h"
-
-ClientSocket::ClientSocket(const char* ipAddress, int port) : ipAddress(ipAddress), port(port) {
+ClientSocket::ClientSocket() {
+    this->ipAddress = "127.0.0.1";
+    this->port = 8089;
     createSocket();
     connectToServer();
 }
@@ -22,9 +24,9 @@ void ClientSocket::createSocket() {
 
 void ClientSocket::connectToServer() {
     serverAddress.sin_family = AF_INET;
-    serverAddress.sin_port = htons(port);
+    serverAddress.sin_port = htons(8089);
 
-    if (inet_pton(AF_INET, ipAddress, &serverAddress.sin_addr) <= 0) {
+    if (inet_pton(AF_INET, "127.0.0.1", &serverAddress.sin_addr) <= 0) {
         std::cerr << "Invalid address/ Address not supported" << std::endl;
         exit(EXIT_FAILURE);
     }
@@ -35,14 +37,23 @@ void ClientSocket::connectToServer() {
     }
 }
 
-void ClientSocket::sendMessage(const std::string& message) {
-    send(clientSocket, message.c_str(), message.size(), 0);
-    std::cout << "Message sent: " << message << std::endl;
+void ClientSocket::sendMessage(const int& requestType, const std::string& message) {
+    std::string fullMessage = std::to_string(requestType) + "\t" + message;
+    if (send(clientSocket, fullMessage.c_str(), fullMessage.size(), 0) < 0) {
+        std::cerr << "Send failed" << std::endl;
+    } else {
+        std::cout << "Message sent: " << fullMessage << std::endl;
+    }
 }
 
 std::string ClientSocket::receiveMessage() {
     char buffer[1024] = {0};
-    int sizeOfBuffer = read(clientSocket, buffer, 1024);
-    std::string message(buffer, sizeOfBuffer);
+    ssize_t sizeOfBuffer = read(clientSocket, buffer, 1024);
+    if (sizeOfBuffer < 0) {
+        std::cerr << "Receive failed" << std::endl;
+        return "";
+    }
+    std::string message(buffer, static_cast<size_t>(sizeOfBuffer));
+    std::cout << "Message received: " << message << std::endl;
     return message;
 }
