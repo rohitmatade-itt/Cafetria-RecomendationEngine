@@ -6,7 +6,6 @@
 #include <algorithm>
 #include <numeric>
 #include <cctype>
-
 #include <cppconn/driver.h>
 #include <cppconn/exception.h>
 #include <cppconn/resultset.h>
@@ -84,6 +83,12 @@ struct Feedback {
     std::string comment;
 };
 
+struct MenuItem {
+    int item_id;
+    double cost_price;
+    double selling_price;
+};
+
 std::vector<Feedback> fetchFeedbackFromDB() {
     std::vector<Feedback> feedbacks;
     try {
@@ -104,15 +109,41 @@ std::vector<Feedback> fetchFeedbackFromDB() {
             feedbacks.push_back(feedback);
         }
     } catch (sql::SQLException &e) {
-        std::cerr << "SQLException: " << e.what();
-                std::cerr << "MySQL error code: " << e.getErrorCode() << std::endl;
+        std::cerr << "SQLException: " << e.what() << std::endl;
+        std::cerr << "MySQL error code: " << e.getErrorCode() << std::endl;
         std::cerr << "SQLState: " << e.getSQLState() << std::endl;
     }
 
     return feedbacks;
 }
 
-void recommendMenuItems(const std::vector<Feedback>& feedbacks, SentimentAnalyzer& analyzer) {
+std::vector<MenuItem> fetchMenuItemsFromDB() {
+    std::vector<MenuItem> menuItems;
+    try {
+        sql::Driver *driver = get_driver_instance();
+        std::unique_ptr<sql::Connection> con(driver->connect("tcp://127.0.0.1:3306", "rohitmatade", "Code#ub$7"));
+        con->setSchema("cafeteria");
+
+        std::unique_ptr<sql::Statement> stmt(con->createStatement());
+        std::unique_ptr<sql::ResultSet> res(stmt->executeQuery("SELECT item_id, cost_price, selling_price FROM Menu"));
+
+        while (res->next()) {
+            MenuItem menuItem;
+            menuItem.item_id = res->getInt("item_id");
+            menuItem.cost_price = res->getDouble("cost_price");
+            menuItem.selling_price = res->getDouble("selling_price");
+            menuItems.push_back(menuItem);
+        }
+    } catch (sql::SQLException &e) {
+        std::cerr << "SQLException: " << e.what() << std::endl;
+        std::cerr << "MySQL error code: " << e.getErrorCode() << std::endl;
+        std::cerr << "SQLState: " << e.getSQLState() << std::endl;
+    }
+
+    return menuItems;
+}
+
+void recommendMenuItems(const std::vector<Feedback>& feedbacks, const std::vector<MenuItem>& menuItems, SentimentAnalyzer& analyzer) {
     std::unordered_map<int, std::vector<int>> itemScores;
 
     for (const auto& feedback : feedbacks) {
@@ -121,25 +152,43 @@ void recommendMenuItems(const std::vector<Feedback>& feedbacks, SentimentAnalyze
         itemScores[feedback.item_id].push_back(totalScore);
     }
 
-    std::vector<std::pair<int, double>> averageScores;
+    std::unordered_map<int, MenuItem> menuMap;
+    for (const auto& menuItem : menuItems) {
+        menuMap[menuItem.item_id] = menuItem;
+    }
+
+    std::vector<std::tuple<int, double, double>> averageScores;
     for (const auto& [item_id, scores] : itemScores) {
         double averageScore = std::accumulate(scores.begin(), scores.end(), 0) / static_cast<double>(scores.size());
-        averageScores.emplace_back(item_id, averageScore);
+        auto it = menuMap.find(item_id);
+        if (it != menuMap.end()) {
+            double cost_price = it->second.cost_price;
+            double selling_price = it->second.selling_price;
+            double profitPercent = ((selling_price - cost_price) / cost_price) * 100;
+            averageScores.emplace_back(item_id, averageScore, profitPercent);
+        }
     }
 
     std::sort(averageScores.begin(), averageScores.end(), [](const auto& a, const auto& b) {
-        return a.second > b.second;
+        return std::get<1>(a) > std::get<1>(b);
     });
 
-    for (const auto& [item_id, averageScore] : averageScores) {
-        std::cout << "Item ID: " << item_id << " | Average Score: " << averageScore << "\n";
+    for (const auto& [item_id, averageScore, profitPercent] : averageScores) {
+        std::cout << "Item ID: " << item_id << " | Average Score: " << averageScore;
+        // if(user is Employee)
+        // {
+        //     std::cout << "\n";
+        // }
+        // else{
+            std::cout << " | Profit Percent: " << profitPercent << "\n";
+        // }
     }
 }
 
 int main() {
     SentimentAnalyzer analyzer("sentiment_words.txt");
     std::vector<Feedback> feedbacks = fetchFeedbackFromDB();
-    recommendMenuItems(feedbacks, analyzer);
+    std::vector<MenuItem> menuItems = fetchMenuItemsFromDB();
+    recommendMenuItems(feedbacks, menuItems, analyzer);
     return 0;
 }
-
