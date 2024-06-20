@@ -18,7 +18,7 @@ enum class AdminOptions {
 };
 
 void Admin::adminLandingPage() {
-    
+
     std::vector<std::string> options = {"Display Menu Items", "View Specific Date Menu", "Add Menu Item", "Remove Menu Item", "Add Employee", "Remove Employee", "Logout"};
 
     int selected_option = Utils::selectOption(options);
@@ -49,7 +49,7 @@ void Admin::adminLandingPage() {
             std::cout << "Invalid Option" << std::endl;
             break;
     }
-    std::cout << "Press any key to go back";
+    std::cout << "Press any key to go back: ";
     std::cin.ignore();
 }
 

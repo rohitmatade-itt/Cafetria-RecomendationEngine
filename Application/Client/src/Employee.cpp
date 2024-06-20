@@ -21,7 +21,7 @@ void Employee::employeeLandingPage() {
     getNotificationIfAny();
     
     std::cout << "Employee Landing Page" << std::endl;
-    std::vector<std::string> options = {"Display Menu Items", "View Specific Date Menu", "Get Recomondation", "Give Feedback" "Logout"};
+    std::vector<std::string> options = {"Display Menu Items", "View Specific Date Menu", "Get Recomondation", "Give Feedback", "Logout"};
 
     int selected_option = Utils::selectOption(options);
 
@@ -49,6 +49,8 @@ void Employee::employeeLandingPage() {
         default:
             break;
     }
+    std::cout << "Press any key to go back: ";
+    std::cin.ignore();
 }
 
 void Employee::getRecomondation() {
