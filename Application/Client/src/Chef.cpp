@@ -4,11 +4,10 @@
 #include "Utils.h"
 
 enum class ChefOptions {
-    DISPLAY_MENU,
+    DISPLAY_MENU = 1,
     VIEW_SPECIFIC_DATE_MENU,
-    GET_RECOMONDATION_FOR_TOMORROW,
-    GENERATE_REPORT,
     ROLLOUT_NEXT_DAY_MENU,
+    GENERATE_REPORT,
     LOGOUT
 };
 
@@ -18,41 +17,36 @@ void Chef::getNotificationIfAny() {
 }
 
 void Chef::chefLandingPage() {
-    userWelcome();
     getNotificationIfAny();
+
+    std::vector<std::string> options = {"Display Menu Items", "View Specific Date Menu", "Rollout Next Day Menu", "Generate Report", "Logout"};
+
+    int selected_option = Utils::selectOption(options);
     
-    while(true)
-    {
-        std::vector<std::string> options = {"Display Menu Items", "View Specific Date Menu", "Get Recomondation for Tomorrow", "Generate Report", "Rollout Next Day Menu", "Logout"};
+    switch(static_cast<ChefOptions>(selected_option)) {
+    case ChefOptions::DISPLAY_MENU:
+            displayMenu();
+            break;
 
-        int selected_option = Utils::selectOption(options);
-        system("clear");
-        
-        switch(static_cast<ChefOptions>(selected_option)) {
-            case ChefOptions::VIEW_SPECIFIC_DATE_MENU:
-                viewSpecificDateMenu();
-                break;
+        case ChefOptions::VIEW_SPECIFIC_DATE_MENU:
+            viewSpecificDateMenu();
+            break;
 
-            case ChefOptions::GET_RECOMONDATION_FOR_TOMORROW:
-                std::cout << "Get Recomondation for Tomorrow" << std::endl;
-                getRecomondationForTomorrow();
-                break;
+        case ChefOptions::ROLLOUT_NEXT_DAY_MENU:
+            rolloutNextDayMenu();
+            break;
 
-            case ChefOptions::GENERATE_REPORT:
-                generateReport();
-                break;
+        case ChefOptions::GENERATE_REPORT:
+            generateReport();
+            break;
 
-            case ChefOptions::ROLLOUT_NEXT_DAY_MENU:
-                rolloutNextDayMenu();
-                break;
+        case ChefOptions::LOGOUT:
+            std::cout << "Logging out..." << std::endl;
+            exit(0);
 
-            case ChefOptions::LOGOUT:
-                std::cout << "Logging out..." << std::endl;
-                exit(0);
-            default:
-                std::cout << "Invalid Option" << std::endl;
-                break;
-        }
+        default:
+            std::cout << "Invalid Option" << std::endl;
+            break;
     }
 }
 
@@ -64,6 +58,6 @@ void Chef::rolloutNextDayMenu() {
     std::cout << "Rollout Next Day Menu" << std::endl;
 }
 
-void Chef::getRecomondationForTomorrow() {
-    std::cout << "Get Recomondation for Tomorrow" << std::endl;
+void Chef::getRecomondation() {
+    std::cout << "Get Recomondation" << std::endl;
 }

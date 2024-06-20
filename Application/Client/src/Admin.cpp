@@ -18,42 +18,39 @@ enum class AdminOptions {
 };
 
 void Admin::adminLandingPage() {
+    
+    std::vector<std::string> options = {"Display Menu Items", "View Specific Date Menu", "Add Menu Item", "Remove Menu Item", "Add Employee", "Remove Employee", "Logout"};
 
-    userWelcome();
-    while(true)
-    {
-        std::vector<std::string> options = {"Display Menu Items", "View Specific Date Menu", "Add Menu Item", "Remove Menu Item", "Add Employee", "Remove Employee", "Logout"};
-
-        int selected_option = Utils::selectOption(options);
-        system("clear");
-        
-        switch(static_cast<AdminOptions>(selected_option)) {
-            case AdminOptions::DISPLAY_MENU:
-                displayMenu();
-                break;
-            case AdminOptions::VIEW_SPECIFIC_DATE_MENU:
-                viewSpecificDateMenu();
-                break;
-            case AdminOptions::ADD_EMPLOYEE:
-                addEmployee();
-                break;
-            case AdminOptions::REMOVE_EMPLOYEE:
-                removeEmployee();
-                break;
-            case AdminOptions::ADD_MENU_ITEM:
-                addMenuItem();
-                break;
-            case AdminOptions::REMOVE_MENU_ITEM:
-                removeMenuItem();
-                break;
-            case AdminOptions::LOGOUT:
-                std::cout << "Logging out..." << std::endl;
-                exit(0);
-            default:
-                std::cout << "Invalid Option" << std::endl;
-                break;
-        }
+    int selected_option = Utils::selectOption(options);
+    
+    switch(static_cast<AdminOptions>(selected_option)) {
+        case AdminOptions::DISPLAY_MENU:
+            displayMenu();
+            break;
+        case AdminOptions::VIEW_SPECIFIC_DATE_MENU:
+            viewSpecificDateMenu();
+            break;
+        case AdminOptions::ADD_EMPLOYEE:
+            addEmployee();
+            break;
+        case AdminOptions::REMOVE_EMPLOYEE:
+            removeEmployee();
+            break;
+        case AdminOptions::ADD_MENU_ITEM:
+            addMenuItem();
+            break;
+        case AdminOptions::REMOVE_MENU_ITEM:
+            removeMenuItem();
+            break;
+        case AdminOptions::LOGOUT:
+            std::cout << "Logging out..." << std::endl;
+            exit(0);
+        default:
+            std::cout << "Invalid Option" << std::endl;
+            break;
     }
+    std::cout << "Press any key to go back";
+    std::cin.ignore();
 }
 
 bool Admin::addEmployee() {

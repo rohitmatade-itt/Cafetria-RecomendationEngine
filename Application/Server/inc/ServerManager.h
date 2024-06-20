@@ -2,6 +2,7 @@
 #define SERVERMANAGER_H
 
 #include <string>
+
 #include "ServerSocket.h"
 #include "SocketProtocol.h"
 

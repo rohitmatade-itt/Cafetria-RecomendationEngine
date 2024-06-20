@@ -17,19 +17,28 @@ int main() {
     std::string login_status = user.userLogin();
 
     auto user_type = Utils::splitStringbyTab(login_status)[1];
+
+    std::cout << "\033[1;35mHello! \033[0m" << std::endl;
+    std::cin.ignore();
     
     if (user_type == "Employee") {
         Employee employee;
-        employee.userWelcome();
-        employee.employeeLandingPage();
+        while (true)
+        {
+            employee.employeeLandingPage();
+        }
     } else if (user_type == "Chef") {
         Chef chef;
-        chef.userWelcome();
-        chef.chefLandingPage();
+        while (true)
+        {
+            chef.chefLandingPage();
+        }
     } else if (user_type == "Admin") {
         Admin admin;
-        admin.userWelcome();
-        admin.adminLandingPage();
+        while (true)
+        {
+            admin.adminLandingPage();
+        }
     } else {
         std::cout << "Invalid user type!" << std::endl;
     }

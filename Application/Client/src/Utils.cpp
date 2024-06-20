@@ -1,5 +1,6 @@
 #include <iostream>
 #include <ncurses.h>
+
 #include "Utils.h"
 
 namespace Utils {

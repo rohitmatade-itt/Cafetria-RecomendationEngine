@@ -1,8 +1,9 @@
-#include "ClientSocket.h"
 #include <iostream>
 #include <cstring>
 #include <unistd.h>
 #include <arpa/inet.h>
+
+#include "ClientSocket.h"
 
 ClientSocket::ClientSocket() {
     this->ipAddress = "127.0.0.1";
@@ -42,7 +43,6 @@ void ClientSocket::sendMessage(const int& requestType, const std::string& messag
     if (send(clientSocket, fullMessage.c_str(), fullMessage.size(), 0) < 0) {
         std::cerr << "Send failed" << std::endl;
     } else {
-        std::cout << "Message sent: " << fullMessage << std::endl;
     }
 }
 
@@ -54,6 +54,5 @@ std::string ClientSocket::receiveMessage() {
         return "";
     }
     std::string message(buffer, static_cast<size_t>(sizeOfBuffer));
-    std::cout << "Message received: " << message << std::endl;
     return message;
 }

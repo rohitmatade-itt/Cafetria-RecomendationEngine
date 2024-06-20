@@ -11,7 +11,6 @@ private:
     UserDTO user_dto;
 public:
     std::string userLogin();
-    void userWelcome() const;
     void displayMenu() const;
     void viewSpecificDateMenu() const;
 };

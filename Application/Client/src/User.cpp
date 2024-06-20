@@ -19,16 +19,7 @@ std::string User::userLogin() {
     
     clientSocket.sendMessage(static_cast<int>(RequestType::LOGIN_REQUEST), user_dto.serialiser());
     std::string login_status = clientSocket.receiveMessage();
-    std::cout << "Login Status: " << login_status << std::endl;
     return login_status;
-}
-
-void User::userWelcome() const {
-    std::cout << "\033[1;35m";
-    std::cout << "Hello!" << std::endl;
-    std::cout << "\033[0m";
-    std::cout << "Press Enter to select an option...";
-    std::cin.ignore();
 }
 
 void User::displayMenu() const {

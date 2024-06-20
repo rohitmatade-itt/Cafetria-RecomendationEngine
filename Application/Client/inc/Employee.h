@@ -4,9 +4,7 @@
 #include "User.h"
 
 class Employee : public User {
-public:
-    Employee();
-    
+public:    
     void employeeLandingPage();
     void getNotificationIfAny();
     void getRecomondation();

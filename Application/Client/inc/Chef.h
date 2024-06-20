@@ -7,7 +7,7 @@ class Chef : public User {
 public:
     void chefLandingPage();
     void getNotificationIfAny();
-    void getRecomondationForTomorrow();
+    void getRecomondation();
     void generateReport();
     void rolloutNextDayMenu();
 };

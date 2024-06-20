@@ -54,11 +54,8 @@ void ServerSocket::acceptConnection() {
 
 void ServerSocket::sendMessage(int requestType, std::string message) {
     std::string fullMessage = std::to_string(requestType) + "\t" + message;
-    std::cout << "Sending message: " << fullMessage << std::endl;
     if (send(requestSocket, fullMessage.c_str(), fullMessage.size(), 0) < 0) {
         std::cerr << "Send failed" << std::endl;
-    } else {
-        std::cout << "Message sent: " << fullMessage << std::endl;
     }
 }
 
@@ -73,7 +70,6 @@ std::string ServerSocket::receiveMessage() {
         return "";
     }
     std::string message(buffer, static_cast<size_t>(sizeOfBuffer));
-    std::cout << "Message received: " << message << std::endl;
     return message;
 }
 

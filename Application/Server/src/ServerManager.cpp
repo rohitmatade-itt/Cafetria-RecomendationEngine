@@ -1,7 +1,8 @@
-#include "ServerManager.h"
 #include <iostream>
 #include <sstream>
+#include <thread>
 
+#include "ServerManager.h"
 #include "UserDTO.h"
 #include "UserDBManager.h"
 #include "ClientRequestManager.h"
@@ -18,7 +19,9 @@ ServerManager::~ServerManager() {
 
 void ServerManager::start() {
     serverSocket->acceptConnection();
-    this->handleClientRequest();
+
+    std::thread handleClientRequest(&ServerManager::handleClientRequest, this);
+    handleClientRequest.detach();
 }
 
 std::string ServerManager::receiveMessage() {

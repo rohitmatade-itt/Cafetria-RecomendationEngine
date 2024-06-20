@@ -4,7 +4,8 @@
 #include <netinet/in.h>
 #include <string>
 #include <utility>
-#include "SocketProtocol.h" // Ensure this file contains the definition for SocketRequest
+
+#include "SocketProtocol.h"
 
 class ServerSocket {
 public:
