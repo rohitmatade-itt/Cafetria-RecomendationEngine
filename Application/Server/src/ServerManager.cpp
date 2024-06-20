@@ -60,6 +60,8 @@ void ServerManager::handleClientRequest() {
     std::string user_type;
     std::string menu_list;
     std::string user_details;
+    std::string report;
+    std::string recomended_items;
     switch (static_cast<int>(request.requestType)) {
         case static_cast<int>(RequestType::LOGIN_REQUEST):
             user_type = clientRequestManager.loginRequest(request.message);
@@ -109,6 +111,16 @@ void ServerManager::handleClientRequest() {
         case static_cast<int>(RequestType::REMOVE_MENU_ITEM_REQUEST):
             menu_list = clientRequestManager.removeMenuItemRequest(request.message);
             serverSocket->sendMessage(static_cast<int>(ResponseType::REMOVE_MENU_ITEM), menu_list);
+            break;
+
+        // case static_cast<int>(RequestType::GENERATE_REPORT_REQUEST):
+        //     report = clientRequestManager.generateReportRequest(request.message);
+        //     serverSocket->sendMessage(static_cast<int>(ResponseType::GENERATE_REPORT), report);
+        //     break;
+
+        case static_cast<int>(RequestType::GET_RECOMMENDATION):
+            recomended_items = clientRequestManager.getRecommendedListRequest(request.message);
+            serverSocket->sendMessage(static_cast<int>(ResponseType::GET_RECOMMENDATION), recomended_items);
             break;
             
         default:

@@ -36,7 +36,7 @@ void ServerSocket::bindSocket() {
 }
 
 void ServerSocket::listenSocket() {
-    if (listen(serverSocket, 3) < 0) {
+    if (listen(serverSocket, 10) < 0) {
         perror("Listen");
         close(serverSocket);
         exit(EXIT_FAILURE);

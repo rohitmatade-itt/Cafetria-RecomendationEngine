@@ -3,6 +3,7 @@
 #include "MenuDBManager.h"
 #include "UserDTO.h"
 #include "RolloutDBManager.h"
+#include "RecommendationEngine.h"
 
 #include <vector>
 #include <algorithm>
@@ -77,4 +78,18 @@ std::string ClientRequestManager::addMenuItemRequest(std::string message) {
 std::string ClientRequestManager::removeMenuItemRequest(std::string message) {
     MenuDBManager menuDBManager;
     return menuDBManager.removeMenuItem(message);
+}
+
+// std::string ClientRequestManager::generateReportRequest(std::string message) {
+//     RollOutDBManager rolloutDBManager;
+//     std::string startdate = splitStringbyTab(message)[0];
+//     std::string enddate = splitStringbyTab(message)[1];
+
+//     return rolloutDBManager.generateReport(startdate, enddate);
+// }
+
+std::string ClientRequestManager::getRecommendedListRequest(std::string message) {
+    RecommendationEngine engine("sentiment_words.txt");
+    int count = std::stoi(message);
+    return engine.recommendMenuItems(count);
 }

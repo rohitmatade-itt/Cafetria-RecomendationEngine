@@ -2,9 +2,11 @@
 
 #include "Chef.h"
 #include "Utils.h"
+#include "ClientSocket.h"
+#include "RequestType.h"
 
 enum class ChefOptions {
-    DISPLAY_MENU = 1,
+    DISPLAY_MENU,
     VIEW_SPECIFIC_DATE_MENU,
     ROLLOUT_NEXT_DAY_MENU,
     GENERATE_REPORT,
@@ -24,7 +26,7 @@ void Chef::chefLandingPage() {
     int selected_option = Utils::selectOption(options);
     
     switch(static_cast<ChefOptions>(selected_option)) {
-    case ChefOptions::DISPLAY_MENU:
+        case ChefOptions::DISPLAY_MENU:
             displayMenu();
             break;
 
@@ -36,9 +38,9 @@ void Chef::chefLandingPage() {
             rolloutNextDayMenu();
             break;
 
-        case ChefOptions::GENERATE_REPORT:
-            generateReport();
-            break;
+        // case ChefOptions::GENERATE_REPORT:
+        //     generateReport();
+        //     break;
 
         case ChefOptions::LOGOUT:
             std::cout << "Logging out..." << std::endl;
@@ -52,14 +54,42 @@ void Chef::chefLandingPage() {
     std::cin.ignore();
 }
 
-void Chef::generateReport() {
-    std::cout << "Generate Report" << std::endl;
-}
+// void Chef::generateReport() {
+//     std::cout << "Generate Report" << std::endl;
+//     std::string startDate, endDate;
+//     std::cout << "Enter start date (YYYY-MM-DD): ";
+//     std::cin >> startDate;
+//     std::cout << "Enter end date (YYYY-MM-DD): ";
+//     std::cin >> endDate;
+
+//     ClientSocket clientSocket;
+//     clientSocket.sendMessage(static_cast<int>(RequestType::GENERATE_REPORT_REQUEST), startDate + "\t" + endDate);
+//     std::string report = clientSocket.receiveMessage();
+//     printReport(report);
+// }
 
 void Chef::rolloutNextDayMenu() {
+    int count;
+    std::string item_id;
+    
     std::cout << "Rollout Next Day Menu" << std::endl;
+
+    std::cout << "How many recommendations do you want? : ";
+    std::cin >> count;
+    getRecomondation(count);
+
+    std::cout << "Enter the item_id of the items you want to add to the Rollout menu: ";
+    std::cin >> item_id;
 }
 
-void Chef::getRecomondation() {
-    std::cout << "Get Recomondation" << std::endl;
+void Chef::getRecomondation(int count) {    
+    ClientSocket clientSocket;
+    clientSocket.sendMessage(static_cast<int>(RequestType::GET_RECOMMENDATION), std::to_string(count));
+    std::string recommendations = clientSocket.receiveMessage();
+    recommendations = Utils::removeResponseType(recommendations);
+
+    std::cout << "Recommended Items: " << std::endl;
+    std::cout << "Item Name\t Score \t Proft %" << std::endl;
+    
+    std::cout << recommendations << std::endl;
 }

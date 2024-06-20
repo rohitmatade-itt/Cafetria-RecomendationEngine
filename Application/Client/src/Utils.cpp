@@ -62,4 +62,8 @@ namespace Utils {
         
         return result;
     }
+
+    std::string removeResponseType(std::string response) {
+        return response.substr(response.find('\t') + 1);
+    }
 }

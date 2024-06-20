@@ -9,4 +9,10 @@ struct SocketRequest {
     std::string message;
 };
 
+class SocketProtocol {
+public:
+    static std::string serialise(const SocketRequest& message);
+    static SocketRequest deserialise(const std::string& message);
+};
+
 #endif // SOCKETPROTOCOL_H

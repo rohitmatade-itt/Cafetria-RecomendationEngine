@@ -10,6 +10,7 @@
 class RollOutDBManager {
 public:
     std::vector<std::string> getRollOutByDate(std::string date);
+    // std::string generateReport(std::string start_date, std::string end_date);
 private:
     DatabaseManager dbManager;
 };

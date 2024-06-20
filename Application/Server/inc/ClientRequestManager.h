@@ -12,6 +12,8 @@ public:
     std::string removeEmployeeRequest(std::string message);
     std::string addMenuItemRequest(std::string message);
     std::string removeMenuItemRequest(std::string message);
+    // std::string generateReportRequest(std::string message);
+    std::string getRecommendedListRequest(std::string message);
 };
 
 #endif // CLIENTREQUESTMANAGER_H

@@ -41,3 +41,19 @@ std::string MenuDBManager::removeMenuItem(std::string item_name) {
         return "Failed to remove item";
     }
 }
+
+std::vector<MenuItem> MenuDBManager::fetchMenuItems()
+{
+    std::vector<MenuItem> menuItems;
+    std::string query = "SELECT item_id, item_name, cost_price, selling_price FROM Menu";
+    auto result = dbManager.fetchData(query);
+    for (auto row : result) {
+        MenuItem menuItem;
+        menuItem.item_id = std::stoi(row[0]);
+        menuItem.item_name = row[1];
+        menuItem.cost_price = std::stof(row[2]);
+        menuItem.selling_price = std::stof(row[3]);
+        menuItems.push_back(menuItem);
+    }
+    return menuItems;
+}
