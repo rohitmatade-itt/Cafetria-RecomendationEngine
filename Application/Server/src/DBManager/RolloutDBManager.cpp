@@ -11,6 +11,27 @@ std::vector<std::string> RollOutDBManager::getRollOutByDate(std::string date)
     return menu_list;
 }
 
+std::string RollOutDBManager::rolloutMenu(std::string item_id)
+{
+    std::string query = "INSERT INTO RolloutMenu (item_id, rollout_date) VALUES ('" + item_id + "', DATE_ADD(CURRENT_DATE, INTERVAL 1 DAY))";
+    dbManager.executeUpdate(query);
+    return "Menu rolled out successfully";
+}
+
+std::string RollOutDBManager::getRolloutMenu(std::string message)
+{
+    std::string query = "SELECT * FROM RolloutMenu WHERE rollout_date = DATE_ADD(CURRENT_DATE, INTERVAL 1 DAY)";
+    auto result = dbManager.fetchData(query);
+    std::string tabSeparatedString;
+    for (auto row : result) {
+        for (auto column : row) {
+            tabSeparatedString += column + "\t";
+        }
+        tabSeparatedString += "\n";
+    }
+    return tabSeparatedString;
+}
+
 // std::string RollOutDBManager::generateReport(std::string start_date, std::string end_date)
 // {
 //     std::vector<std::string> report;

@@ -93,3 +93,13 @@ std::string ClientRequestManager::getRecommendedListRequest(std::string message)
     int count = std::stoi(message);
     return engine.recommendMenuItems(count);
 }
+
+std::string ClientRequestManager::rolloutNextDayMenuRequest(std::string message) {
+    RollOutDBManager rolloutDBManager;
+    return rolloutDBManager.rolloutMenu(message);
+}
+
+std::string ClientRequestManager::getNextDayMenuRequest(std::string message) {
+    RollOutDBManager rolloutDBManager;
+    return rolloutDBManager.getRolloutMenu(message);
+}

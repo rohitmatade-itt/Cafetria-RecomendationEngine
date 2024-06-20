@@ -70,7 +70,7 @@ void Chef::chefLandingPage() {
 
 void Chef::rolloutNextDayMenu() {
     int count;
-    std::string item_id;
+    std::string item_id, meal_type;
     
     std::cout << "Rollout Next Day Menu" << std::endl;
 
@@ -78,8 +78,25 @@ void Chef::rolloutNextDayMenu() {
     std::cin >> count;
     getRecomondation(count);
 
-    std::cout << "Enter the item_id of the items you want to add to the Rollout menu: ";
-    std::cin >> item_id;
+    while (true)
+    {
+        std::cout << "Enter the item_id of the items you want to add to the Rollout menu (0 to stop): ";
+        std::cin >> item_id;
+
+        if (item_id == "0")
+            break;
+        
+        std::cout << "Enter the meal type (1: Breakfast, 2: Lunch, 3: Dinner): ";
+        std::cin >> meal_type;
+    }
+    
+
+    ClientSocket clientSocket;
+    clientSocket.sendMessage(static_cast<int>(RequestType::ROLLOUT_NEXT_DAY_MENU), item_id + "\t" + meal_type);
+    std::string response = clientSocket.receiveMessage();
+    response = Utils::removeResponseType(response);
+    std::cout << response << std::endl;
+
 }
 
 void Chef::getRecomondation(int count) {    
@@ -89,7 +106,9 @@ void Chef::getRecomondation(int count) {
     recommendations = Utils::removeResponseType(recommendations);
 
     std::cout << "Recommended Items: " << std::endl;
-    std::cout << "Item Name\t Score \t Proft %" << std::endl;
+    std::cout << "---------------------------------------------------------------------------" << std::endl;
+    std::cout << "Item Id\t\t Item Name\t\t Score \t\t\t Proft %" << std::endl;
+    std::cout << "---------------------------------------------------------------------------" << std::endl;
     
     std::cout << recommendations << std::endl;
 }

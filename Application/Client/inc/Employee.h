@@ -7,9 +7,10 @@ class Employee : public User {
 public:    
     void employeeLandingPage();
     void getNotificationIfAny();
-    void getRecomondation();
     void giveVote();
     void giveFeedback();
+    void getNextDayMenu();
+    void getUserRecommendation();
 };
 
 #endif // EMPLOYEE_H

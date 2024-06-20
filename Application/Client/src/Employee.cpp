@@ -1,12 +1,15 @@
 #include <iostream>
+#include <iomanip>
 
 #include "Employee.h"
 #include "Utils.h"
+#include "ClientSocket.h"
+#include "RequestType.h"
 
 enum class EmployeeOptions {
     DISPLAY_MENU = 1,
     VIEW_SPECIFIC_DATE_MENU,
-    GET_RECOMONDATION,
+    GIVE_VOTE,
     GIVE_FEEDBACK,
     LOGOUT
 };
@@ -21,7 +24,7 @@ void Employee::employeeLandingPage() {
     getNotificationIfAny();
     
     std::cout << "Employee Landing Page" << std::endl;
-    std::vector<std::string> options = {"Display Menu Items", "View Specific Date Menu", "Get Recomondation", "Give Feedback", "Logout"};
+    std::vector<std::string> options = {"Display Menu Items", "View Specific Date Menu", "Give Vote", "Give Feedback", "Logout"};
 
     int selected_option = Utils::selectOption(options);
 
@@ -34,8 +37,8 @@ void Employee::employeeLandingPage() {
             viewSpecificDateMenu();
             break;
 
-        case EmployeeOptions::GET_RECOMONDATION:
-            getRecomondation();
+        case EmployeeOptions::GIVE_VOTE:
+            giveVote();
             break;
 
         case EmployeeOptions::GIVE_FEEDBACK:
@@ -53,17 +56,41 @@ void Employee::employeeLandingPage() {
     std::cin.ignore();
 }
 
-void Employee::getRecomondation() {
-    std::cout << "Get Recomondation" << std::endl;
-    // Get recomondation based on user's previous orders
-}
-
 void Employee::giveVote() {
     std::cout << "Give Vote" << std::endl;
-    // Give vote to the menu item
+    getNextDayMenu();
+    
+    getUserRecommendation();
 }
 
 void Employee::giveFeedback() {
     std::cout << "Give Feedback" << std::endl;
     // Give feedback to the food item
+}
+
+void Employee::getNextDayMenu() {
+
+    ClientSocket clientSocket;
+    clientSocket.sendMessage(static_cast<int>(RequestType::GET_NEXT_DAY_MENU_REQUEST), "");
+    std::string next_day_menu = clientSocket.receiveMessage();
+
+    std::cout << "Next Day Menu" << std::endl;
+    auto menu_items = Utils::splitStringbyTab(next_day_menu);
+
+    std::cout << "+---------+-------------+" << std::endl;
+    std::cout << "| Item ID | Meal Type   |" << std::endl;
+    std::cout << "+---------+-------------+" << std::endl;
+
+    for(auto menu_item : menu_items) {
+        std::vector<std::string> item_details = Utils::splitStringbyTab(menu_item);
+        if(item_details.size() >= 2) {
+            std::cout << "| " << std::setw(8) << item_details[0] << " | " << std::setw(11) << item_details[1] << " |" << std::endl;
+        }
+    }
+    std::cout << "+---------+-------------+" << std::endl;
+}
+
+void Employee::getUserRecommendation()
+{
+    std::cout << "Get User Recommendation" << std::endl;
 }

@@ -14,6 +14,8 @@ public:
     std::string removeMenuItemRequest(std::string message);
     // std::string generateReportRequest(std::string message);
     std::string getRecommendedListRequest(std::string message);
+    std::string rolloutNextDayMenuRequest(std::string message);
+    std::string getNextDayMenuRequest(std::string message);
 };
 
 #endif // CLIENTREQUESTMANAGER_H

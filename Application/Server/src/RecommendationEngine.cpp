@@ -50,7 +50,7 @@ std::string RecommendationEngine::getRecommendations(const std::vector<std::tupl
 
     for (int i = 0; i < count && i < averageScores.size(); ++i) {
         const auto& [item_id, item_name, averageScore, profitPercent] = averageScores[i];
-        std::string itemString = std::to_string(item_id) + "\t" + item_name + "\t" + std::to_string(averageScore) + "\t" + std::to_string(profitPercent) + "\t";
+        std::string itemString = std::to_string(item_id) + "\t\t" + item_name + "\t\t" + std::to_string(averageScore) + "\t\t" + std::to_string(profitPercent) + "\t";
         recommendedItemsList += itemString + "\n";
     }
     return recommendedItemsList;

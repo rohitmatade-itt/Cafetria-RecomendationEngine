@@ -57,11 +57,8 @@ void ServerManager::handleClientRequest() {
     SocketRequest request = parseSocketRequest(message);
 
     ClientRequestManager clientRequestManager;
-    std::string user_type;
-    std::string menu_list;
-    std::string user_details;
-    std::string report;
-    std::string recomended_items;
+    std::string user_type, menu_list, user_details, report, recomended_items, rollout_status, rollout_list;
+
     switch (static_cast<int>(request.requestType)) {
         case static_cast<int>(RequestType::LOGIN_REQUEST):
             user_type = clientRequestManager.loginRequest(request.message);
@@ -121,6 +118,16 @@ void ServerManager::handleClientRequest() {
         case static_cast<int>(RequestType::GET_RECOMMENDATION):
             recomended_items = clientRequestManager.getRecommendedListRequest(request.message);
             serverSocket->sendMessage(static_cast<int>(ResponseType::GET_RECOMMENDATION), recomended_items);
+            break;
+
+        case static_cast<int>(RequestType::ROLLOUT_NEXT_DAY_MENU):
+            rollout_status = clientRequestManager.rolloutNextDayMenuRequest(request.message);
+            serverSocket->sendMessage(static_cast<int>(ResponseType::ROLLOUT_NEXT_DAY_MENU), rollout_status);
+            break;
+
+        case static_cast<int>(RequestType::GET_NEXT_DAY_MENU_REQUEST):
+            rollout_list = clientRequestManager.getNextDayMenuRequest(request.message);
+            serverSocket->sendMessage(static_cast<int>(ResponseType::DISPLAY_NEXT_DAY_MENU), rollout_list);
             break;
             
         default:
