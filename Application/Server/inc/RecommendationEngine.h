@@ -10,11 +10,7 @@
 #include <numeric>
 #include <cctype>
 #include <iomanip>
-
-#include <cppconn/driver.h>
-#include <cppconn/exception.h>
-#include <cppconn/resultset.h>
-#include <cppconn/statement.h>
+#include <tuple>
 
 #include "SentimentAnalyzer.h"
 #include "RecommendationDTO.h"
@@ -29,8 +25,6 @@ private:
     std::vector<Feedback> feedbacks;
     std::vector<MenuItem> menuItems;
 
-    std::vector<Feedback> fetchFeedback();
-    std::vector<MenuItem> fetchMenuItems();
     std::string getRecommendations(const std::vector<std::tuple<int, std::string, double, double>>& averageScores, int count);
 };
 

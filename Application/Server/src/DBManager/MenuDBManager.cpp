@@ -11,10 +11,11 @@ std::vector<std::string> MenuDBManager::getAllItemsName() {
     return menu_list;
 }
 
-std::string MenuDBManager::addMenuItem(std::string item_details) {
+bool MenuDBManager::addMenuItem(std::string item_details) {
     std::vector<std::string> item_elements;
     std::stringstream ss(item_details);
     std::string element;
+    bool response;
 
     while (std::getline(ss, element, '\t')) {
         item_elements.push_back(element);
@@ -27,19 +28,22 @@ std::string MenuDBManager::addMenuItem(std::string item_details) {
                         std::to_string(std::stoi(item_elements[3])) + "')";
 
     if (dbManager.executeUpdate(query)) {
-        return "Item added successfully";
+        response = true;
     } else {
-        return "Failed to add item";
+        response = false;
     }
+    return response;
 }
 
-std::string MenuDBManager::removeMenuItem(std::string item_name) {
+bool MenuDBManager::removeMenuItem(std::string item_name) {
+    bool response;
     std::string query = "DELETE FROM Menu WHERE item_name = '" + item_name + "'";
     if (dbManager.executeUpdate(query)) {
-        return "Item removed successfully";
+        response = true;
     } else {
-        return "Failed to remove item";
+        response = false;
     }
+    return response;
 }
 
 std::vector<MenuItem> MenuDBManager::fetchMenuItems()

@@ -11,6 +11,7 @@
 
 ServerManager::ServerManager(int port) : port(port) {
     serverSocket = new ServerSocket(port);
+    serverSocket->acceptConnection();
 }
 
 ServerManager::~ServerManager() {
@@ -18,15 +19,13 @@ ServerManager::~ServerManager() {
 }
 
 void ServerManager::start() {
-    serverSocket->acceptConnection();
-
-    std::thread handleClientRequest(&ServerManager::handleClientRequest, this);
-    handleClientRequest.detach();
+    std::string message = serverSocket->receiveMessage();
+    std::cout << "Message: " << message << std::endl;
+    std::string response = handleClientRequest(message);
+    std::cout << "Response: " << response << std::endl;
+    serverSocket->sendMessage(static_cast<int>(ResponseType::SERVER_RESPONSE), response);
 }
 
-std::string ServerManager::receiveMessage() {
-    return serverSocket->receiveMessage();
-}
 
 SocketRequest ServerManager::parseSocketRequest(std::string input) {
     std::istringstream iss(input);
@@ -47,11 +46,13 @@ SocketRequest ServerManager::parseSocketRequest(std::string input) {
     return {requestType, actualMessage};
 }
 
-void ServerManager::handleClientRequest() {
-    std::string message = receiveMessage();
+std::string ServerManager::handleClientRequest(std::string message) {
+
+    std::string response = "";
+
     if (message.empty()) {
         std::cerr << "Empty message received. Closing connection." << std::endl;
-        return;
+        return response;
     }
 
     SocketRequest request = parseSocketRequest(message);
@@ -63,75 +64,90 @@ void ServerManager::handleClientRequest() {
         case static_cast<int>(RequestType::LOGIN_REQUEST):
             user_type = clientRequestManager.loginRequest(request.message);
             if(user_type.empty()) {
-                serverSocket->sendMessage(static_cast<int>(ResponseType::FAILED_LOGIN), user_type);
+                response = user_type;
             }
             else{
-                serverSocket->sendMessage(static_cast<int>(ResponseType::SUCCESSFUL_LOGIN), user_type);
+                response = user_type;
             }
             break;
 
         case static_cast<int>(RequestType::DISPLAY_MENU_REQUEST):
             menu_list = clientRequestManager.displayMenuRequest(request.message);
-            serverSocket->sendMessage(static_cast<int>(ResponseType::DISPLAY_MENU), menu_list);
+            response = menu_list;
             break;
 
         case static_cast<int>(RequestType::VIEW_SPECIFIC_DATE_MENU_REQUEST):
             menu_list = clientRequestManager.viewSpecificDateMenuRequest(request.message);
-            serverSocket->sendMessage(static_cast<int>(ResponseType::VIEW_SPECIFIC_DATE_MENU), menu_list);
+            response = menu_list;
             break;
 
         case static_cast<int>(RequestType::ADD_EMPLOYEE_REQUEST):
-            user_details = clientRequestManager.addEmployeeRequest(request.message);
-            if(user_details.empty()) {
-                serverSocket->sendMessage(static_cast<int>(ResponseType::FAILED_ADD_EMPLOYEE), user_details);
+            if(clientRequestManager.addEmployeeRequest(request.message))
+            {
+                response = "Employee added successfully";
             }
-            else{
-                serverSocket->sendMessage(static_cast<int>(ResponseType::SUCCESSFUL_ADD_EMPLOYEE), user_details);
+            else
+            {
+                response = "Employee not added";
             }
             break;
 
         case static_cast<int>(RequestType::REMOVE_EMPLOYEE_REQUEST):
-            user_details = clientRequestManager.removeEmployeeRequest(request.message);
-            if(user_details.empty()) {
-                serverSocket->sendMessage(static_cast<int>(ResponseType::FAILED_REMOVE_EMPLOYEE), user_details);
+            if(clientRequestManager.removeEmployeeRequest(request.message))
+            {
+                response = "Employee removed successfully";
             }
-            else{
-                serverSocket->sendMessage(static_cast<int>(ResponseType::SUCCESSFUL_REMOVE_EMPLOYEE), user_details);
+            else
+            {
+                response = "Employee not removed";
             }
             break;
 
         case static_cast<int>(RequestType::ADD_MENU_ITEM_REQUEST):
-            menu_list = clientRequestManager.addMenuItemRequest(request.message);
-            serverSocket->sendMessage(static_cast<int>(ResponseType::ADD_MENU_ITEM), menu_list);
+            if(clientRequestManager.addMenuItemRequest(request.message))
+            {
+                response = "Item added successfully";
+            }
+            else
+            {
+                response = "Item not added";
+            }
             break;
 
         case static_cast<int>(RequestType::REMOVE_MENU_ITEM_REQUEST):
-            menu_list = clientRequestManager.removeMenuItemRequest(request.message);
-            serverSocket->sendMessage(static_cast<int>(ResponseType::REMOVE_MENU_ITEM), menu_list);
+            if(clientRequestManager.removeMenuItemRequest(request.message))
+            {
+                response = "Item removed successfully";
+            }
+            else
+            {
+                response = "Item not removed";
+            }
             break;
 
         // case static_cast<int>(RequestType::GENERATE_REPORT_REQUEST):
         //     report = clientRequestManager.generateReportRequest(request.message);
-        //     serverSocket->sendMessage(static_cast<int>(ResponseType::GENERATE_REPORT), report);
+        //     response = report;
         //     break;
 
         case static_cast<int>(RequestType::GET_RECOMMENDATION):
             recomended_items = clientRequestManager.getRecommendedListRequest(request.message);
-            serverSocket->sendMessage(static_cast<int>(ResponseType::GET_RECOMMENDATION), recomended_items);
+            response = recomended_items;
             break;
 
         case static_cast<int>(RequestType::ROLLOUT_NEXT_DAY_MENU):
             rollout_status = clientRequestManager.rolloutNextDayMenuRequest(request.message);
-            serverSocket->sendMessage(static_cast<int>(ResponseType::ROLLOUT_NEXT_DAY_MENU), rollout_status);
+            response = rollout_status;
             break;
 
         case static_cast<int>(RequestType::GET_NEXT_DAY_MENU_REQUEST):
             rollout_list = clientRequestManager.getNextDayMenuRequest(request.message);
-            serverSocket->sendMessage(static_cast<int>(ResponseType::DISPLAY_NEXT_DAY_MENU), rollout_list);
+            response = rollout_list;
             break;
             
         default:
             std::cerr << "Invalid request type: " << request.requestType << std::endl;
             break;
     }
+    return response;
 }

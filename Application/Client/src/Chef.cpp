@@ -9,7 +9,7 @@ enum class ChefOptions {
     DISPLAY_MENU,
     VIEW_SPECIFIC_DATE_MENU,
     ROLLOUT_NEXT_DAY_MENU,
-    GENERATE_REPORT,
+    // GENERATE_REPORT,
     LOGOUT
 };
 
@@ -21,7 +21,7 @@ void Chef::getNotificationIfAny() {
 void Chef::chefLandingPage() {
     getNotificationIfAny();
 
-    std::vector<std::string> options = {"Display Menu Items", "View Specific Date Menu", "Rollout Next Day Menu", "Generate Report", "Logout"};
+    std::vector<std::string> options = {"Display Menu Items", "View Specific Date Menu", "Rollout Next Day Menu", "Logout"};
 
     int selected_option = Utils::selectOption(options);
     
@@ -62,7 +62,6 @@ void Chef::chefLandingPage() {
 //     std::cout << "Enter end date (YYYY-MM-DD): ";
 //     std::cin >> endDate;
 
-//     ClientSocket clientSocket;
 //     clientSocket.sendMessage(static_cast<int>(RequestType::GENERATE_REPORT_REQUEST), startDate + "\t" + endDate);
 //     std::string report = clientSocket.receiveMessage();
 //     printReport(report);
@@ -78,34 +77,35 @@ void Chef::rolloutNextDayMenu() {
     std::cin >> count;
     getRecomondation(count);
 
-    while (true)
-    {
+    // while (true)
+    // {
+    //     std::cout << "Enter the item_id of the items you want to add to the Rollout menu (0 to stop): ";
+    //     std::cin >> item_id;
+
+    //     if (item_id == "0")
+    //         break;
+        
+    //     std::cout << "Enter the meal type (1: Breakfast, 2: Lunch, 3: Dinner): ";
+    //     std::cin >> meal_type;
+    // }
+
+    while(true){
         std::cout << "Enter the item_id of the items you want to add to the Rollout menu (0 to stop): ";
         std::cin >> item_id;
-
-        if (item_id == "0")
+        if(item_id == "0")
             break;
-        
         std::cout << "Enter the meal type (1: Breakfast, 2: Lunch, 3: Dinner): ";
         std::cin >> meal_type;
     }
     
-
-    ClientSocket clientSocket;
-    clientSocket.sendMessage(static_cast<int>(RequestType::ROLLOUT_NEXT_DAY_MENU), item_id + "\t" + meal_type);
-    std::string response = clientSocket.receiveMessage();
-    response = Utils::removeResponseType(response);
-    std::cout << response << std::endl;
-
 }
 
 void Chef::getRecomondation(int count) {    
-    ClientSocket clientSocket;
     clientSocket.sendMessage(static_cast<int>(RequestType::GET_RECOMMENDATION), std::to_string(count));
     std::string recommendations = clientSocket.receiveMessage();
     recommendations = Utils::removeResponseType(recommendations);
 
-    std::cout << "Recommended Items: " << std::endl;
+    std::cout << "                             Recommended Items:                            " << std::endl;
     std::cout << "---------------------------------------------------------------------------" << std::endl;
     std::cout << "Item Id\t\t Item Name\t\t Score \t\t\t Proft %" << std::endl;
     std::cout << "---------------------------------------------------------------------------" << std::endl;

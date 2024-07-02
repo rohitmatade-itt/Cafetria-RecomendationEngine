@@ -11,8 +11,8 @@
 class MenuDBManager {
 public:
     std::vector<std::string> getAllItemsName();
-    std::string addMenuItem(std::string item_details);
-    std::string removeMenuItem(std::string item_name);
+    bool addMenuItem(std::string item_details);
+    bool removeMenuItem(std::string item_name);
     std::vector<MenuItem> fetchMenuItems();
 private:
     DatabaseManager dbManager;

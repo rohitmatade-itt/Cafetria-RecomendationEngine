@@ -69,7 +69,6 @@ bool Admin::addEmployee() {
     std::cout << "Last Name: ";
     std::getline(std::cin, last_name);
 
-    ClientSocket clientSocket;
     clientSocket.sendMessage(static_cast<int>(RequestType::ADD_EMPLOYEE_REQUEST), user_name + "\t" + first_name + "\t" + last_name + "\t" + employee_id);
     std::string add_employee_status = clientSocket.receiveMessage();
     if(add_employee_status == "User Added Successfully") {
@@ -86,7 +85,6 @@ bool Admin::removeEmployee() {
     std::cout << "Enter Employee ID: ";
     std::cin >> employee_id;
 
-    ClientSocket clientSocket;
     clientSocket.sendMessage(static_cast<int>(RequestType::REMOVE_EMPLOYEE_REQUEST), employee_id);
     std::string remove_employee_status = clientSocket.receiveMessage();
     if(remove_employee_status == "User Removed Successfully") {
@@ -113,7 +111,6 @@ bool Admin::addMenuItem() {
     std::cout << "Availablity Status (1 for available, 0 for not available): ";
     std::cin >> availablity_status;
     
-    ClientSocket clientSocket;
     clientSocket.sendMessage(static_cast<int>(RequestType::ADD_MENU_ITEM_REQUEST), item_name + "\t" + std::to_string(cost_price) + "\t" + std::to_string(selling_price) + "\t" + std::to_string(availablity_status));
     std::string add_menu_item_status = clientSocket.receiveMessage();
     if(add_menu_item_status == "Menu Item Added Successfully") {
@@ -131,7 +128,6 @@ bool Admin::removeMenuItem() {
     std::string menu_item;
     std::getline(std::cin, menu_item);
 
-    ClientSocket clientSocket;
     clientSocket.sendMessage(static_cast<int>(RequestType::REMOVE_MENU_ITEM_REQUEST), menu_item);
     std::string remove_menu_item_status = clientSocket.receiveMessage();
     if(remove_menu_item_status == "Menu Item Removed Successfully") {

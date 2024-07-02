@@ -7,7 +7,7 @@
 #include "RequestType.h"
 
 enum class EmployeeOptions {
-    DISPLAY_MENU = 1,
+    DISPLAY_MENU,
     VIEW_SPECIFIC_DATE_MENU,
     GIVE_VOTE,
     GIVE_FEEDBACK,
@@ -60,7 +60,17 @@ void Employee::giveVote() {
     std::cout << "Give Vote" << std::endl;
     getNextDayMenu();
     
-    getUserRecommendation();
+    std::string item_id;
+    while (true)
+    {
+        std::cout << "Enter the item id for which you want to give vote(0 to stop): ";
+        std::cin >> item_id;
+        if(item_id == "0") {
+            break;
+        }
+
+    }
+
 }
 
 void Employee::giveFeedback() {
@@ -70,7 +80,6 @@ void Employee::giveFeedback() {
 
 void Employee::getNextDayMenu() {
 
-    ClientSocket clientSocket;
     clientSocket.sendMessage(static_cast<int>(RequestType::GET_NEXT_DAY_MENU_REQUEST), "");
     std::string next_day_menu = clientSocket.receiveMessage();
 
@@ -88,9 +97,4 @@ void Employee::getNextDayMenu() {
         }
     }
     std::cout << "+---------+-------------+" << std::endl;
-}
-
-void Employee::getUserRecommendation()
-{
-    std::cout << "Get User Recommendation" << std::endl;
 }

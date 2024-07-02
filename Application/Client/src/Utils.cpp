@@ -17,38 +17,33 @@ namespace Utils {
                 printw("   %s\n", menuOptions[index].c_str());
             }
         }
+        refresh();
     }
 
     int selectOption(const std::vector<std::string>& menuOptions) {
-        initscr();
-        noecho();
-        cbreak();
-        keypad(stdscr, TRUE);
+        initscr(); // Initializes ncurses
+        keypad(stdscr, TRUE); // Enables reading special keys
 
         int selectedOption = 0;
         displayOptions(menuOptions, selectedOption);
 
+        int userInput;
         while (true) {
-            int userInput = getch();
+            userInput = getch();
 
-            switch (userInput) {
-                case KEY_UP:
-                    selectedOption = (selectedOption - 1 + menuOptions.size()) % menuOptions.size();
-                    displayOptions(menuOptions, selectedOption);
-                    break;
-                case KEY_DOWN:
-                    selectedOption = (selectedOption + 1) % menuOptions.size();
-                    displayOptions(menuOptions, selectedOption);
-                    break;
-                case '\n':
-                    endwin();
-                    return selectedOption;
-                default:
-                    break;
+            if (userInput == KEY_UP) {
+                selectedOption = (selectedOption - 1 + menuOptions.size()) % menuOptions.size();
+            } else if (userInput == KEY_DOWN) {
+                selectedOption = (selectedOption + 1) % menuOptions.size();
+            } else if (userInput == '\n') {
+                break;
             }
+
+            displayOptions(menuOptions, selectedOption);
         }
 
-        return -1;
+        endwin();
+        return selectedOption;
     }
 
     std::vector<std::string> splitStringbyTab(std::string str) {

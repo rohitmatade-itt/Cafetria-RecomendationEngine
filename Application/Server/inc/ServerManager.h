@@ -12,10 +12,9 @@ public:
     ~ServerManager();
 
     void start();
-    std::string receiveMessage();
     SocketRequest parseSocketRequest(std::string input);
 
-    void handleClientRequest();
+    std::string handleClientRequest(std::string message);
 
 private:
     int port;

@@ -3,7 +3,7 @@
 #include <sstream>
 
 
-std::string UserDBManager::addUser(std::string user_details) {
+bool UserDBManager::addUser(std::string user_details) {
     std::vector<std::string> user_elements;
     std::stringstream ss(user_details);
     std::string element;
@@ -18,14 +18,18 @@ std::string UserDBManager::addUser(std::string user_details) {
                         user_elements[2] + "', '" +
                         user_elements[3] + "')";
 
-    dbManager.executeUpdate(query);
-    return "User added successfully";
+    if(dbManager.executeUpdate(query)) {
+        return true;
+    }
+    return false;
 }
 
-std::string UserDBManager::removeUser(std::string userName) {
+bool UserDBManager::removeUser(std::string userName) {
     std::string query = "DELETE FROM User WHERE user_name = '" + userName + "'";
-    dbManager.executeUpdate(query);
-    return "User removed successfully";
+    if(dbManager.executeUpdate(query)) {
+        return true;
+    }
+    return false;
 }
 
 std::string UserDBManager::getFirstName(const std::string& userName) {

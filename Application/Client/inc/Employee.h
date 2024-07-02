@@ -10,7 +10,7 @@ public:
     void giveVote();
     void giveFeedback();
     void getNextDayMenu();
-    void getUserRecommendation();
+    void getRecommendationToUser();
 };
 
 #endif // EMPLOYEE_H

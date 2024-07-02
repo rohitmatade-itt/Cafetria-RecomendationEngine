@@ -60,22 +60,22 @@ std::string ClientRequestManager::viewSpecificDateMenuRequest(std::string messag
     return menu_list.empty() ? "No menu available for the date" : menu_list[0];
 }
 
-std::string ClientRequestManager::addEmployeeRequest(std::string message) {
+bool ClientRequestManager::addEmployeeRequest(std::string message) {
     UserDBManager userDBManager;
     return userDBManager.addUser(message);
 }
 
-std::string ClientRequestManager::removeEmployeeRequest(std::string message) {
+bool ClientRequestManager::removeEmployeeRequest(std::string message) {
     UserDBManager userDBManager;
     return userDBManager.removeUser(message);
 }
 
-std::string ClientRequestManager::addMenuItemRequest(std::string message) {
+bool ClientRequestManager::addMenuItemRequest(std::string message) {
     MenuDBManager menuDBManager;
     return menuDBManager.addMenuItem(message);
 }
 
-std::string ClientRequestManager::removeMenuItemRequest(std::string message) {
+bool ClientRequestManager::removeMenuItemRequest(std::string message) {
     MenuDBManager menuDBManager;
     return menuDBManager.removeMenuItem(message);
 }
