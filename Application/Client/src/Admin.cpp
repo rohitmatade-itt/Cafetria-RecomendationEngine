@@ -80,8 +80,8 @@ bool Admin::addEmployee() {
 }
 
 bool Admin::removeEmployee() {
-    std::cout << "Remove Employee" << std::endl;
     std::string employee_id;
+    std::cout << "Remove Employee" << std::endl;
     std::cout << "Enter Employee ID: ";
     std::cin >> employee_id;
 

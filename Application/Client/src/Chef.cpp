@@ -77,18 +77,6 @@ void Chef::rolloutNextDayMenu() {
     std::cin >> count;
     getRecomondation(count);
 
-    // while (true)
-    // {
-    //     std::cout << "Enter the item_id of the items you want to add to the Rollout menu (0 to stop): ";
-    //     std::cin >> item_id;
-
-    //     if (item_id == "0")
-    //         break;
-        
-    //     std::cout << "Enter the meal type (1: Breakfast, 2: Lunch, 3: Dinner): ";
-    //     std::cin >> meal_type;
-    // }
-
     while(true){
         std::cout << "Enter the item_id of the items you want to add to the Rollout menu (0 to stop): ";
         std::cin >> item_id;

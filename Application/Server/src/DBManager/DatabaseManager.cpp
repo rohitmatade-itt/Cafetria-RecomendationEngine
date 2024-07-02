@@ -27,19 +27,10 @@ void DatabaseManager::connect() {
 }
 
 void DatabaseManager::disconnect() {
-    if (mySqlStatement) {
-        delete mySqlStatement;
-        mySqlStatement = nullptr;
-    }
-    if (mySqlResultSet) {
-        delete mySqlResultSet;
-        mySqlResultSet = nullptr;
-    }
-    if (mySqlConnection) {
-        mySqlConnection->close();
-        delete mySqlConnection;
-        mySqlConnection = nullptr;
-    }
+mySqlConnection->close();
+
+    delete mySqlStatement;
+    delete mySqlConnection;
 }
 
 bool DatabaseManager::executeUpdate(const std::string& query) {
