@@ -71,11 +71,13 @@ bool Admin::addEmployee() {
 
     clientSocket.sendMessage(static_cast<int>(RequestType::ADD_EMPLOYEE_REQUEST), user_name + "\t" + first_name + "\t" + last_name + "\t" + employee_id);
     std::string add_employee_status = clientSocket.receiveMessage();
-    if(add_employee_status == "User Added Successfully") {
-        std::cout << "User " << first_name << " Added Successfully" << std::endl;
+    add_employee_status = Utils::splitStringbyTab(add_employee_status)[1];
+    if(add_employee_status == "Employee added successfully") {
+        std::cout << "Employee " << first_name << " Added Successfully" << std::endl;
     } else {
-        std::cout << "Error Adding User" << std::endl;
+        std::cout << "Error Adding Employee" << std::endl;
     }
+    
     return true;
 }
 
@@ -87,10 +89,11 @@ bool Admin::removeEmployee() {
 
     clientSocket.sendMessage(static_cast<int>(RequestType::REMOVE_EMPLOYEE_REQUEST), employee_id);
     std::string remove_employee_status = clientSocket.receiveMessage();
-    if(remove_employee_status == "User Removed Successfully") {
-        std::cout << "User " << employee_id << " Removed Successfully" << std::endl;
+    remove_employee_status = Utils::splitStringbyTab(remove_employee_status)[1];
+    if(remove_employee_status == "Employee removed successfully") {
+        std::cout << "Employee " << employee_id << " Removed Successfully" << std::endl;
     } else {
-        std::cout << "Error Removing User" << std::endl;
+        std::cout << "Error Removing Employee" << std::endl;
     }
 
     return true;
@@ -113,10 +116,11 @@ bool Admin::addMenuItem() {
     
     clientSocket.sendMessage(static_cast<int>(RequestType::ADD_MENU_ITEM_REQUEST), item_name + "\t" + std::to_string(cost_price) + "\t" + std::to_string(selling_price) + "\t" + std::to_string(availablity_status));
     std::string add_menu_item_status = clientSocket.receiveMessage();
-    if(add_menu_item_status == "Menu Item Added Successfully") {
-        std::cout << "Menu Item " << item_name << " Added Successfully" << std::endl;
+    add_menu_item_status = Utils::splitStringbyTab(add_menu_item_status)[1];
+    if(add_menu_item_status == "Menu item added successfully") {
+        std::cout << "Menu item " << item_name << " Added Successfully" << std::endl;
     } else {
-        std::cout << "Error Adding Menu Item" << std::endl;
+        std::cout << "Error Adding Menu item" << std::endl;
     }
 
     return true;
@@ -130,11 +134,13 @@ bool Admin::removeMenuItem() {
 
     clientSocket.sendMessage(static_cast<int>(RequestType::REMOVE_MENU_ITEM_REQUEST), menu_item);
     std::string remove_menu_item_status = clientSocket.receiveMessage();
-    if(remove_menu_item_status == "Menu Item Removed Successfully") {
+    remove_menu_item_status = Utils::splitStringbyTab(remove_menu_item_status)[1];
+    if(remove_menu_item_status == "Menu item removed successfully") {
         std::cout << "Menu Item " << menu_item << " Removed Successfully" << std::endl;
     } else {
-        std::cout << "Error Removing Menu Item" << std::endl;
+        std::cout << "Error Removing Menu item" << std::endl;
     }
+
     return true;
 }
 

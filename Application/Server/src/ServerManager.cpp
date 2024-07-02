@@ -20,9 +20,7 @@ ServerManager::~ServerManager() {
 
 void ServerManager::start() {
     std::string message = serverSocket->receiveMessage();
-    std::cout << "Message: " << message << std::endl;
     std::string response = handleClientRequest(message);
-    std::cout << "Response: " << response << std::endl;
     serverSocket->sendMessage(static_cast<int>(ResponseType::SERVER_RESPONSE), response);
 }
 
@@ -59,6 +57,7 @@ std::string ServerManager::handleClientRequest(std::string message) {
 
     ClientRequestManager clientRequestManager;
     std::string user_type, menu_list, user_details, report, recomended_items, rollout_status, rollout_list;
+    bool a;
 
     switch (static_cast<int>(request.requestType)) {
         case static_cast<int>(RequestType::LOGIN_REQUEST):
@@ -106,22 +105,22 @@ std::string ServerManager::handleClientRequest(std::string message) {
         case static_cast<int>(RequestType::ADD_MENU_ITEM_REQUEST):
             if(clientRequestManager.addMenuItemRequest(request.message))
             {
-                response = "Item added successfully";
+                response = "Menu item added successfully";
             }
             else
             {
-                response = "Item not added";
+                response = "Menu item not added";
             }
             break;
 
         case static_cast<int>(RequestType::REMOVE_MENU_ITEM_REQUEST):
             if(clientRequestManager.removeMenuItemRequest(request.message))
             {
-                response = "Item removed successfully";
+                response = "Menu item removed successfully";
             }
             else
             {
-                response = "Item not removed";
+                response = "Menu item not removed";
             }
             break;
 

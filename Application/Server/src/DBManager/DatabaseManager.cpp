@@ -27,7 +27,7 @@ void DatabaseManager::connect() {
 }
 
 void DatabaseManager::disconnect() {
-mySqlConnection->close();
+    mySqlConnection->close();
 
     delete mySqlStatement;
     delete mySqlConnection;
