@@ -1,6 +1,5 @@
 #include <iostream>
 #include <iomanip>
-#include <string>
 
 #include "User.h"
 #include "ClientSocket.h"

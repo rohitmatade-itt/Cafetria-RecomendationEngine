@@ -1,3 +1,5 @@
+#include <sstream>
+
 #include "ClientRequestManager.h"
 #include "UserDBManager.h"
 #include "MenuDBManager.h"
@@ -6,10 +8,6 @@
 #include "VoteDBManager.h"
 #include "FeedbackDBManager.h"
 #include "RecommendationEngine.h"
-
-#include <vector>
-#include <algorithm>
-#include <sstream>
 
 std::vector<std::string> splitStringbyTab(const std::string& str) {
     std::vector<std::string> result;

@@ -1,14 +1,8 @@
 #ifndef RECOMMENDATION_ENGINE_H
 #define RECOMMENDATION_ENGINE_H
 
-#include <iostream>
-#include <fstream>
-#include <sstream>
-#include <unordered_map>
 #include <vector>
-#include <algorithm>
 #include <numeric>
-#include <cctype>
 #include <iomanip>
 #include <tuple>
 

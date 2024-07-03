@@ -2,8 +2,6 @@
 #define SERVERSOCKET_H
 
 #include <netinet/in.h>
-#include <string>
-#include <utility>
 
 #include "SocketProtocol.h"
 

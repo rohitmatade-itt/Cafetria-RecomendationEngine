@@ -1,6 +1,6 @@
-#include "RollOutDBManager.h"
-
 #include <sstream>
+
+#include "RollOutDBManager.h"
 
 std::vector<std::string> RollOutDBManager::getRollOutByDate(std::string date)
 {

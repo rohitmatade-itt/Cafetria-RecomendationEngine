@@ -1,7 +1,6 @@
-#include "UserDBManager.h"
-
 #include <sstream>
 
+#include "UserDBManager.h"
 
 bool UserDBManager::addUser(std::string user_details) {
     std::vector<std::string> user_elements;

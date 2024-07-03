@@ -1,8 +1,7 @@
-#include "FeedbackDBManager.h"
-
 #include <sstream>
 
-#include <vector>
+#include "FeedbackDBManager.h"
+
 
 std::vector<Feedback> FeedbackDBManager::fetchFeedback()
 {

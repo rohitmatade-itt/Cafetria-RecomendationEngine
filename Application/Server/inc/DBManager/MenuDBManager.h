@@ -1,10 +1,6 @@
 #ifndef MENU_DBMANAGER_H
 #define MENU_DBMANAGER_H
 
-#include <iostream>
-#include <vector>
-#include <string>
-
 #include "DatabaseManager.h"
 #include "RecommendationDTO.h"
 

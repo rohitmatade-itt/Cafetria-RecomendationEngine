@@ -1,7 +1,6 @@
 #ifndef USER_DTO_H
 #define USER_DTO_H
 
-#include <iostream>
 #include <string>
 
 class UserDTO

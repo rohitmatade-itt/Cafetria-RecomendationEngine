@@ -3,6 +3,7 @@
 #include <stdexcept>
 #include <cstring>
 #include <unistd.h>
+
 #include "ServerSocket.h"
 
 ServerSocket::ServerSocket(int port) : port(port), socketAddressLength(sizeof(socketAddress)) {

@@ -1,7 +1,6 @@
 #ifndef DATABASE_MANAGER_H
 #define DATABASE_MANAGER_H
 
-#include <iostream>
 #include <vector>
 #include <string>
 #include <cppconn/driver.h>

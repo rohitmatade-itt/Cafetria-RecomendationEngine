@@ -1,6 +1,6 @@
-#include "VoteDBManager.h"
-
 #include <sstream>
+
+#include "VoteDBManager.h"
 
 bool VoteDBManager::voteMenu(std::string message) {
     bool response;
