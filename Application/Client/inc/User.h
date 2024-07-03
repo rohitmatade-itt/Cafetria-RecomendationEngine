@@ -8,7 +8,7 @@
 #include "ClientSocket.h"
 
 class User {
-private:
+protected:
     UserDTO user_dto;
 public:
     ClientSocket& clientSocket = ClientSocket::getInstance();

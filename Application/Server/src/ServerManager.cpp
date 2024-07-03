@@ -56,18 +56,12 @@ std::string ServerManager::handleClientRequest(std::string message) {
     SocketRequest request = parseSocketRequest(message);
 
     ClientRequestManager clientRequestManager;
-    std::string user_type, menu_list, user_details, report, recomended_items, rollout_status, rollout_list;
-    bool a;
+    std::string user_type, menu_list, user_details, report, recomended_items, rollout_status, rollout_list, votes_list;
 
     switch (static_cast<int>(request.requestType)) {
         case static_cast<int>(RequestType::LOGIN_REQUEST):
             user_type = clientRequestManager.loginRequest(request.message);
-            if(user_type.empty()) {
-                response = user_type;
-            }
-            else{
-                response = user_type;
-            }
+            response = user_type;
             break;
 
         case static_cast<int>(RequestType::DISPLAY_MENU_REQUEST):
@@ -135,13 +129,46 @@ std::string ServerManager::handleClientRequest(std::string message) {
             break;
 
         case static_cast<int>(RequestType::ROLLOUT_NEXT_DAY_MENU):
-            rollout_status = clientRequestManager.rolloutNextDayMenuRequest(request.message);
-            response = rollout_status;
+            if(clientRequestManager.rolloutNextDayMenuRequest(request.message))
+            {
+                response = "Menu item added successfully to the next day menu";
+            }
+            else
+            {
+                response = "Menu item not added to the next day menu";
+            }
             break;
 
         case static_cast<int>(RequestType::GET_NEXT_DAY_MENU_REQUEST):
             rollout_list = clientRequestManager.getNextDayMenuRequest(request.message);
             response = rollout_list;
+            break;
+
+        case static_cast<int>(RequestType::VOTE_NEXT_DAY_MENU):
+            if(clientRequestManager.voteNextDayMenuRequest(request.message))
+            {
+                response = "Vote added successfully";
+            }
+            else
+            {
+                response = "Vote not added";
+            }
+            break;
+
+        case static_cast<int>(RequestType::GIVE_FEEDBACK):
+            if(clientRequestManager.giveFeedbackRequest(request.message))
+            {
+                response = "Feedback added successfully";
+            }
+            else
+            {
+                response = "Feedback not added";
+            }
+            break;
+
+        case static_cast<int>(RequestType::VIEW_NEXT_DAY_VOTES):
+            votes_list = clientRequestManager.viewNextDayVotesRequest(request.message);
+            response = votes_list;
             break;
             
         default:

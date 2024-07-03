@@ -14,8 +14,11 @@ public:
     bool removeMenuItemRequest(std::string message);
     // std::string generateReportRequest(std::string message);
     std::string getRecommendedListRequest(std::string message);
-    std::string rolloutNextDayMenuRequest(std::string message);
+    bool rolloutNextDayMenuRequest(std::string message);
     std::string getNextDayMenuRequest(std::string message);
+    bool voteNextDayMenuRequest(std::string message);
+    bool giveFeedbackRequest(std::string message);
+    std::string viewNextDayVotesRequest(std::string message);
 };
 
 #endif // CLIENTREQUESTMANAGER_H

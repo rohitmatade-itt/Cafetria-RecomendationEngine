@@ -1,5 +1,7 @@
 #include "FeedbackDBManager.h"
 
+#include <sstream>
+
 #include <vector>
 
 std::vector<Feedback> FeedbackDBManager::fetchFeedback()
@@ -19,4 +21,26 @@ std::vector<Feedback> FeedbackDBManager::fetchFeedback()
         feedbacks.push_back(feedback);
     }
     return feedbacks;
+}
+
+bool FeedbackDBManager::addFeedback(std::string message)
+{
+    bool response;
+
+    std::vector<std::string> elements;
+    std::stringstream ss(message);
+    std::string element;
+
+    while (std::getline(ss, element, '\t')) {
+        elements.push_back(element);
+    }
+
+    std::string query = "INSERT INTO Feedback (item_id, user_name, date, taste_ratings, quality_ratings, overall_ratings, comment) VALUES ('" + elements[0] + "', '" + elements[1] + "', CURRENT_DATE, '" + elements[2] + "', '" + elements[3] + "', '" + elements[4] + "', '" + elements[5] + "')";
+    if(dbManager.executeUpdate(query)) {
+        response = true;
+    } else {
+        response = false;
+    }
+
+    return response;
 }

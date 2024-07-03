@@ -10,6 +10,7 @@ public:
     void getRecomondation(int count);
     // void generateReport();
     void rolloutNextDayMenu();
+    void viewNextDayVotes();
 };
 
 #endif // CHEF_H

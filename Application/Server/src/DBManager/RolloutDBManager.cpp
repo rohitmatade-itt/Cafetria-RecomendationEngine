@@ -1,5 +1,7 @@
 #include "RollOutDBManager.h"
 
+#include <sstream>
+
 std::vector<std::string> RollOutDBManager::getRollOutByDate(std::string date)
 {
     std::vector<std::string> menu_list;
@@ -11,24 +13,47 @@ std::vector<std::string> RollOutDBManager::getRollOutByDate(std::string date)
     return menu_list;
 }
 
-std::string RollOutDBManager::rolloutMenu(std::string item_id)
+bool RollOutDBManager::rolloutMenu(std::string message)
 {
-    std::string query = "INSERT INTO RolloutMenu (item_id, rollout_date) VALUES ('" + item_id + "', DATE_ADD(CURRENT_DATE, INTERVAL 1 DAY))";
-    dbManager.executeUpdate(query);
-    return "Menu rolled out successfully";
+    std::vector<std::string> elements;
+    std::stringstream ss(message);
+    std::string element;
+    bool response;
+
+    while (std::getline(ss, element, '\t')) {
+        elements.push_back(element);
+    }
+    std::string query = "INSERT INTO RolloutMenu (item_id, meal_type, rollout_date) VALUES ('" + elements[0] + "','" + elements[1] + "', DATE_ADD(CURRENT_DATE, INTERVAL 1 DAY))";
+
+    if(dbManager.executeUpdate(query)) {
+        response = true;
+    } else {
+        response = false;
+    }
+    return response;
 }
 
 std::string RollOutDBManager::getRolloutMenu(std::string message)
 {
-    std::string query = "SELECT * FROM RolloutMenu WHERE rollout_date = DATE_ADD(CURRENT_DATE, INTERVAL 1 DAY)";
-    auto result = dbManager.fetchData(query);
     std::string tabSeparatedString;
-    for (auto row : result) {
-        for (auto column : row) {
-            tabSeparatedString += column + "\t";
+
+    try {
+        std::string query = "SELECT rm.item_id, m.item_name, rm.meal_type "
+                            "FROM RolloutMenu rm "
+                            "JOIN Menu m ON rm.item_id = m.item_id "
+                            "WHERE rm.rollout_date = DATE_ADD(CURRENT_DATE, INTERVAL 1 DAY)";
+        
+        auto result = dbManager.fetchData(query);
+        
+        for (auto& row : result) {
+            if (row.size() >= 3) {
+                tabSeparatedString += row[0] + "\t" + row[1] + "\t" + row[2] + "\n";
+            }
         }
-        tabSeparatedString += "\n";
+    } catch (const std::exception& e) {
+        std::cerr << "Error fetching data: " << e.what() << std::endl;
     }
+
     return tabSeparatedString;
 }
 

@@ -3,6 +3,8 @@
 #include "MenuDBManager.h"
 #include "UserDTO.h"
 #include "RolloutDBManager.h"
+#include "VoteDBManager.h"
+#include "FeedbackDBManager.h"
 #include "RecommendationEngine.h"
 
 #include <vector>
@@ -94,7 +96,7 @@ std::string ClientRequestManager::getRecommendedListRequest(std::string message)
     return engine.recommendMenuItems(count);
 }
 
-std::string ClientRequestManager::rolloutNextDayMenuRequest(std::string message) {
+bool ClientRequestManager::rolloutNextDayMenuRequest(std::string message) {
     RollOutDBManager rolloutDBManager;
     return rolloutDBManager.rolloutMenu(message);
 }
@@ -102,4 +104,19 @@ std::string ClientRequestManager::rolloutNextDayMenuRequest(std::string message)
 std::string ClientRequestManager::getNextDayMenuRequest(std::string message) {
     RollOutDBManager rolloutDBManager;
     return rolloutDBManager.getRolloutMenu(message);
+}
+
+bool ClientRequestManager::voteNextDayMenuRequest(std::string message) {
+    VoteDBManager voteDBManager;
+    return voteDBManager.voteMenu(message);
+}
+
+bool ClientRequestManager::giveFeedbackRequest(std::string message) {
+    FeedbackDBManager feedbackDBManager;
+    return feedbackDBManager.addFeedback(message);
+}
+
+std::string ClientRequestManager::viewNextDayVotesRequest(std::string message) {
+    VoteDBManager voteDBManager;
+    return voteDBManager.getVotes(message);
 }

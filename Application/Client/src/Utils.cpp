@@ -61,4 +61,17 @@ namespace Utils {
     std::string removeResponseType(std::string response) {
         return response.substr(response.find('\t') + 1);
     }
+
+
+    std::vector<std::string> splitStringbyNewline(std::string str) {
+        std::vector<std::string> lines;
+        std::istringstream iss(str);
+        std::string line;
+        
+        while (std::getline(iss, line, '\n')) {
+            lines.push_back(line);
+        }
+        
+        return lines;
+    }
 }

@@ -1,4 +1,5 @@
 #include <iostream>
+#include <iomanip>
 
 #include "Chef.h"
 #include "Utils.h"
@@ -9,6 +10,7 @@ enum class ChefOptions {
     DISPLAY_MENU,
     VIEW_SPECIFIC_DATE_MENU,
     ROLLOUT_NEXT_DAY_MENU,
+    VIEW_NEXT_DAY_VOTES,
     // GENERATE_REPORT,
     LOGOUT
 };
@@ -21,7 +23,7 @@ void Chef::getNotificationIfAny() {
 void Chef::chefLandingPage() {
     getNotificationIfAny();
 
-    std::vector<std::string> options = {"Display Menu Items", "View Specific Date Menu", "Rollout Next Day Menu", "Logout"};
+    std::vector<std::string> options = {"Display Menu Items", "View Specific Date Menu", "Rollout Next Day Menu", "View Next Day Votes", "Logout"};
 
     int selected_option = Utils::selectOption(options);
     
@@ -36,6 +38,10 @@ void Chef::chefLandingPage() {
 
         case ChefOptions::ROLLOUT_NEXT_DAY_MENU:
             rolloutNextDayMenu();
+            break;
+
+        case ChefOptions::VIEW_NEXT_DAY_VOTES:
+            viewNextDayVotes();
             break;
 
         // case ChefOptions::GENERATE_REPORT:
@@ -84,8 +90,12 @@ void Chef::rolloutNextDayMenu() {
             break;
         std::cout << "Enter the meal type (1: Breakfast, 2: Lunch, 3: Dinner): ";
         std::cin >> meal_type;
+
+        clientSocket.sendMessage(static_cast<int>(RequestType::ROLLOUT_NEXT_DAY_MENU), item_id + "\t" + meal_type);
+        std::string rollout_status = clientSocket.receiveMessage();
+        rollout_status = Utils::splitStringbyTab(rollout_status)[1];
+        std::cout << rollout_status << std::endl;
     }
-    
 }
 
 void Chef::getRecomondation(int count) {    
@@ -99,4 +109,34 @@ void Chef::getRecomondation(int count) {
     std::cout << "---------------------------------------------------------------------------" << std::endl;
     
     std::cout << recommendations << std::endl;
+}
+
+void Chef::viewNextDayVotes() {
+    clientSocket.sendMessage(static_cast<int>(RequestType::VIEW_NEXT_DAY_VOTES), "");
+    std::string votes = clientSocket.receiveMessage();
+
+    size_t tab_pos = votes.find('\t');
+    
+    if (tab_pos != std::string::npos) {
+        votes = votes.substr(tab_pos + 1);
+    }
+
+    std::cout << "Next Day Votes" << std::endl;
+    auto vote_list = Utils::splitStringbyNewline(votes);
+
+    std::cout << "+----------+----------------+-------------+---------+" << std::endl;
+    std::cout << "| Item ID  | Item Name      | Meal Type   | Votes   |" << std::endl;
+    std::cout << "+----------+----------------+-------------+---------+" << std::endl;
+
+    for(auto vote : vote_list) {
+        std::vector<std::string> vote_details = Utils::splitStringbyTab(vote);
+        if(vote_details.size() >= 4) {
+            std::cout << "| " << std::setw(8) << vote_details[0] << " | " 
+                      << std::setw(14) << vote_details[1] << " | " 
+                      << std::setw(11) << vote_details[2] << " | "
+                      << std::setw(7) << vote_details[3] << " |" << std::endl;
+        }
+    }
+
+    std::cout << "+----------+----------------+-------------+---------+" << std::endl;
 }
