@@ -20,12 +20,16 @@ bool MenuDBManager::addMenuItem(std::string item_details) {
     while (std::getline(ss, element, '\t')) {
         item_elements.push_back(element);
     }
-
-    std::string query = "INSERT INTO Menu (item_name, cost_price, selling_price, is_available) VALUES ('" +
+    
+    std::string query = "INSERT INTO Menu (item_name, cost_price, selling_price, is_available, VegNonveg, SpiceLevel, Cuisine, isSweet) VALUES ('" +
                         item_elements[0] + "', " +
                         std::to_string(std::stof(item_elements[1])) + ", '" +
                         std::to_string(std::stof(item_elements[2])) + "', '" +
-                        std::to_string(std::stoi(item_elements[3])) + "')";
+                        std::to_string(std::stoi(item_elements[3])) + "', '" +
+                        std::to_string(std::stoi(item_elements[4])) + "', '" +
+                        std::to_string(std::stoi(item_elements[5])) + "', '" +
+                        std::to_string(std::stoi(item_elements[6])) + "', '" +
+                        std::to_string(std::stoi(item_elements[7])) + "')";
 
     if (dbManager.executeUpdate(query)) {
         response = true;

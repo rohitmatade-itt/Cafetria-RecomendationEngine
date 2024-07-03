@@ -47,7 +47,7 @@ void Employee::employeeLandingPage() {
 
         case EmployeeOptions::LOGOUT:
             std::cout << "Logging out..." << std::endl;
-            break;
+            exit(0);
 
         default:
             break;

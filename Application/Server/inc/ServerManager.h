@@ -11,8 +11,9 @@ public:
     ServerManager(int port);
     ~ServerManager();
 
-    void start();
+    bool start();
     SocketRequest parseSocketRequest(std::string input);
+    void acceptConnection();
 
     std::string handleClientRequest(std::string message);
 

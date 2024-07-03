@@ -4,7 +4,9 @@
 #include "User.h"
 
 class Employee : public User {
-public:    
+private:
+    std::string logged_username;
+public:
     void employeeLandingPage();
     void getNotificationIfAny();
     void giveVote();

@@ -101,20 +101,33 @@ bool Admin::removeEmployee() {
 
 bool Admin::addMenuItem() {
     std::cout << "Add Menu Item" << std::endl;
+
     std::string item_name;
     double cost_price, selling_price;
-    bool availablity_status;
+    bool availablity_status, is_sweet;
+    int food_type, spice_level, cuisine_type;
+
     std::cout << "Enter Menu Item Details" << std::endl;
     std::cout << "Item Name: ";
-    std::cin >> item_name;
+    std::getline(std::cin, item_name);
     std::cout << "Cost Price: ";
     std::cin >> cost_price;
     std::cout << "Selling Price: ";
     std::cin >> selling_price;
     std::cout << "Availablity Status (1 for available, 0 for not available): ";
     std::cin >> availablity_status;
-    
-    clientSocket.sendMessage(static_cast<int>(RequestType::ADD_MENU_ITEM_REQUEST), item_name + "\t" + std::to_string(cost_price) + "\t" + std::to_string(selling_price) + "\t" + std::to_string(availablity_status));
+    std::cout << "Food Type(1 for Veg, 2 for Non-veg, 3 for Others): ";
+    std::cin >> food_type;
+    std::cout << "Spice Level(1 for High, 2 for Medium, 3 for Low): ";
+    std::cin >> spice_level;
+    std::cout << "Cuisine Type(1 for North Indian, 2 for South Indian, 3 for Others): ";
+    std::cin >> cuisine_type;
+    std::cout << "Is Sweet(1 for sweet, 0 for not sweet): ";
+    std::cin >> is_sweet;
+
+    std::cout << item_name;
+    std::string food_details = item_name + "\t" + std::to_string(cost_price) + "\t" + std::to_string(selling_price) + "\t" + std::to_string(availablity_status) + "\t" + std::to_string(food_type) + "\t" + std::to_string(spice_level) + "\t" + std::to_string(cuisine_type) + "\t" + std::to_string(is_sweet);
+    clientSocket.sendMessage(static_cast<int>(RequestType::ADD_MENU_ITEM_REQUEST), food_details);
     std::string add_menu_item_status = clientSocket.receiveMessage();
     add_menu_item_status = Utils::splitStringbyTab(add_menu_item_status)[1];
     if(add_menu_item_status == "Menu item added successfully") {

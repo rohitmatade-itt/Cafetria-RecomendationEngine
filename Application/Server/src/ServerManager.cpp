@@ -1,6 +1,5 @@
 #include <iostream>
 #include <sstream>
-#include <thread>
 
 #include "ServerManager.h"
 #include "UserDTO.h"
@@ -11,17 +10,25 @@
 
 ServerManager::ServerManager(int port) : port(port) {
     serverSocket = new ServerSocket(port);
-    serverSocket->acceptConnection();
 }
 
 ServerManager::~ServerManager() {
     delete serverSocket;
 }
 
-void ServerManager::start() {
+void ServerManager::acceptConnection() {
+    serverSocket->acceptConnection();
+}
+
+bool ServerManager::start() {
     std::string message = serverSocket->receiveMessage();
+    if (message.empty()) {
+        std::cerr << "Empty message received. Closing connection." << std::endl;
+        return false;
+    }
     std::string response = handleClientRequest(message);
     serverSocket->sendMessage(static_cast<int>(ResponseType::SERVER_RESPONSE), response);
+    return true;
 }
 
 
@@ -47,11 +54,6 @@ SocketRequest ServerManager::parseSocketRequest(std::string input) {
 std::string ServerManager::handleClientRequest(std::string message) {
 
     std::string response = "";
-
-    if (message.empty()) {
-        std::cerr << "Empty message received. Closing connection." << std::endl;
-        return response;
-    }
 
     SocketRequest request = parseSocketRequest(message);
 
