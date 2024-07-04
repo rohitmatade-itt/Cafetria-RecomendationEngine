@@ -118,3 +118,18 @@ std::string ClientRequestManager::viewNextDayVotesRequest(std::string message) {
     VoteDBManager voteDBManager;
     return voteDBManager.getVotes(message);
 }
+
+std::string ClientRequestManager::getUserVoteListRequest(std::string message) {
+    VoteDBManager voteDBManager;
+    return voteDBManager.getUserVoteList(message);
+}
+
+std::string ClientRequestManager::getUserProfileRequest(std::string message) {
+    UserDBManager userDBManager;
+    return userDBManager.getUserProfile(message);
+}
+
+bool ClientRequestManager::updateUserProfileRequest(std::string message) {
+    UserDBManager userDBManager;
+    return userDBManager.updateUserProfile(message);
+}

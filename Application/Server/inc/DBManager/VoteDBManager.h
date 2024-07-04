@@ -7,6 +7,7 @@ class VoteDBManager {
 public:
     bool voteMenu(std::string message);
     std::string getVotes(std::string message);
+    std::string getUserVoteList(std::string message);
 private:
     DatabaseManager dbManager;
 };

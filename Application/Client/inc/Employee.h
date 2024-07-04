@@ -10,8 +10,11 @@ public:
     void employeeLandingPage();
     void getNotificationIfAny();
     void giveVote();
+    void updateProfile();
+    void getUserProfileDetails();
     void giveFeedback();
     void getNextDayMenu();
+    void getUserVoteList();
     void getRecommendationToUser();
 };
 

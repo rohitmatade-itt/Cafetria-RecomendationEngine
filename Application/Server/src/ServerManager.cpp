@@ -172,6 +172,27 @@ std::string ServerManager::handleClientRequest(std::string message) {
             votes_list = clientRequestManager.viewNextDayVotesRequest(request.message);
             response = votes_list;
             break;
+
+        case static_cast<int>(RequestType::GET_USER_VOTE_LIST):
+            votes_list = clientRequestManager.getUserVoteListRequest(request.message);
+            response = votes_list;
+            break;
+
+        case static_cast<int>(RequestType::GET_USER_PROFILE):
+            user_details = clientRequestManager.getUserProfileRequest(request.message);
+            response = user_details;
+            break;
+
+        case static_cast<int>(RequestType::UPDATE_USER_PROFILE):
+            if(clientRequestManager.updateUserProfileRequest(request.message))
+            {
+                response = "User profile updated successfully";
+            }
+            else
+            {
+                response = "User profile not updated";
+            }
+            break;
             
         default:
             std::cerr << "Invalid request type: " << request.requestType << std::endl;

@@ -11,6 +11,8 @@ public:
     std::string getLastName(const std::string& userName);
     std::string getEmployeeId(const std::string& userName);
     std::string getUserType(const std::string& userName);
+    std::string getUserProfile(const std::string& userName);
+    bool updateUserProfile(std::string message);
 
 private:
     DatabaseManager dbManager;

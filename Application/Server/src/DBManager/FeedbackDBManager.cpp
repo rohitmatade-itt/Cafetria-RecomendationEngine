@@ -34,7 +34,7 @@ bool FeedbackDBManager::addFeedback(std::string message)
         elements.push_back(element);
     }
 
-    std::string query = "INSERT INTO Feedback (item_id, user_name, date, taste_ratings, quality_ratings, overall_ratings, comment) VALUES ('" + elements[0] + "', '" + elements[1] + "', CURRENT_DATE, '" + elements[2] + "', '" + elements[3] + "', '" + elements[4] + "', '" + elements[5] + "')";
+    std::string query = "INSERT INTO Feedback (vote_id, user_name, date, taste_ratings, quality_ratings, overall_ratings, comment) VALUES ('" + elements[0] + "', '" + elements[1] + "', CURRENT_DATE, '" + elements[2] + "', '" + elements[3] + "', '" + elements[4] + "', '" + elements[5] + "')";
     if(dbManager.executeUpdate(query)) {
         response = true;
     } else {

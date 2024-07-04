@@ -19,6 +19,9 @@ public:
     bool voteNextDayMenuRequest(std::string message);
     bool giveFeedbackRequest(std::string message);
     std::string viewNextDayVotesRequest(std::string message);
+    std::string getUserVoteListRequest(std::string message);
+    std::string getUserProfileRequest(std::string message);
+    bool updateUserProfileRequest(std::string message);
 };
 
 #endif // CLIENTREQUESTMANAGER_H

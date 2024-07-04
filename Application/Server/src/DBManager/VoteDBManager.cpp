@@ -46,3 +46,30 @@ std::string VoteDBManager::getVotes(std::string message) {
 
     return tabSeparatedString;
 }
+
+std::string VoteDBManager::getUserVoteList(std::string message) {
+    std::vector<std::string> elements;
+    std::stringstream ss(message);
+    std::string element;
+
+    while (std::getline(ss, element, '\t')) {
+        elements.push_back(element);
+    }
+
+    std::string query = "SELECT vote_id, item_name, date "
+                        "FROM Vote v "
+                        "JOIN Menu m ON v.item_id = m.item_id "
+                        "WHERE user_name = '" + elements[0] + "'";
+    
+    auto result = dbManager.fetchData(query);
+
+    std::string tabSeparatedString;
+    for (const auto& row : result) {
+        for (const auto& field : row) {
+            tabSeparatedString += field + "\t";
+        }
+        tabSeparatedString += "\n";
+    }
+
+    return tabSeparatedString;
+}

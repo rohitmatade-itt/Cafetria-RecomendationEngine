@@ -31,23 +31,24 @@ void User::displayMenu() {
     std::cout << "-----------" << std::endl;
     for (size_t i = 0; i < menu_item_list.size(); ++i) {
         std::cout << std::setw(2) << i + 1 << ". " << menu_item_list[i] << std::endl;
-        if (i != menu_item_list.size() - 1) {
-            std::cout << "-----------" << std::endl;
-        }
     }
 }
 
 void User::viewSpecificDateMenu() {
     std::cout << "Viewing Specific Date Menu..." << std::endl;
     std::string date;
-    std::cout << "Enter the date for which you want to view the menu(YYYY-MM-DD): ";
+    std::cout << "Enter the date for which you want to view the menu (YYYY-MM-DD): ";
     std::cin >> date;
 
     clientSocket.sendMessage(static_cast<int>(RequestType::VIEW_SPECIFIC_DATE_MENU_REQUEST), date);
     std::string menu_items = clientSocket.receiveMessage();
     menu_items = Utils::removeResponseType(menu_items);
     auto menu_item_list = Utils::splitStringbyTab(menu_items);
-    for (auto menu_item : menu_item_list) {
-        std::cout << menu_item << std::endl;
+
+    std::cout << "---------------------------" << std::endl;
+    std::cout << "Menu Items for " << date << ":" << std::endl;
+    std::cout << "--------------------------c-" << std::endl;
+    for (size_t i = 0; i < menu_item_list.size(); ++i) {
+        std::cout << std::setw(2) << i + 1 << ". " << menu_item_list[i] << std::endl;
     }
 }

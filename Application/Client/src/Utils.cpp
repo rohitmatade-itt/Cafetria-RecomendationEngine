@@ -11,18 +11,18 @@ namespace Utils {
         for (int index = 0; index < menuOptions.size(); ++index) {
             if (index == selectedOption) {
                 attron(A_REVERSE);
-                printw("-> %s\n", menuOptions[index].c_str());
+                mvprintw(index + 1, 1, "-> %s", menuOptions[index].c_str());
                 attroff(A_REVERSE);
             } else {
-                printw("   %s\n", menuOptions[index].c_str());
+                mvprintw(index + 1, 1, "   %s", menuOptions[index].c_str());
             }
         }
         refresh();
     }
 
     int selectOption(const std::vector<std::string>& menuOptions) {
-        initscr(); // Initializes ncurses
-        keypad(stdscr, TRUE); // Enables reading special keys
+        initscr();
+        keypad(stdscr, TRUE);
 
         int selectedOption = 0;
         displayOptions(menuOptions, selectedOption);
