@@ -7,8 +7,8 @@ class Employee : public User {
 private:
     std::string logged_username;
 public:
+    Employee(std::string username);
     void employeeLandingPage();
-    void getNotificationIfAny();
     void giveVote();
     void updateProfile();
     void getUserProfileDetails();

@@ -15,6 +15,8 @@ public:
     std::string getUserProfile(const std::string& userName);
     bool updateUserProfile(std::string message);
     std::vector<UserPreference> fetchUserPreference(std::string userName);
+    std::vector<std::string> fetchAllEmployeeAndChef();
+    std::vector<std::string> fetchAllEmployees();
 
 private:
     DatabaseManager dbManager;

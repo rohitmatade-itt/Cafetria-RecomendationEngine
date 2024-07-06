@@ -15,16 +15,16 @@ enum class ChefOptions {
     LOGOUT
 };
 
-void Chef::getNotificationIfAny() {
-    std::cout << "Get Notification If Any" << std::endl;
-    // If admin add/remove menu item
+Chef::Chef(std::string username) : logged_username(username){
 }
 
 void Chef::chefLandingPage() {
-    getNotificationIfAny();
+    getNotificationIfAny(logged_username);
 
     std::vector<std::string> options = {"Display Menu Items", "View Specific Date Menu", "Rollout Next Day Menu", "View Next Day Votes", "Logout"};
 
+    std::cout << "Press enter to continue: ";
+    std::cin.ignore();
     int selected_option = Utils::selectOption(options);
     
     switch(static_cast<ChefOptions>(selected_option)) {
@@ -79,7 +79,7 @@ void Chef::rolloutNextDayMenu() {
     
     std::cout << "Rollout Next Day Menu" << std::endl;
 
-    std::cout << "How many recommendations do you want? : ";
+    std::cout << "How many recommendations do you want? ";
     std::cin >> count;
     getRecomondation(count);
 
@@ -96,6 +96,7 @@ void Chef::rolloutNextDayMenu() {
         rollout_status = Utils::splitStringbyTab(rollout_status)[1];
         std::cout << rollout_status << std::endl;
     }
+    updateNotificationToEmployee("Chef has rolled out the next day menu. Please vote for the items.");
 }
 
 void Chef::getRecomondation(int count) {    

@@ -22,22 +22,23 @@ int main() {
         }
 
         auto login_parts = Utils::splitStringbyTab(login_status);
-        if (login_parts.size() < 2) {
+        if (login_parts.size() < 3) {
             throw std::runtime_error("Login failed: Invalid response format.");
         }
 
         auto user_type = login_parts[1];
+        auto user_name = login_parts[2];
 
-        std::cout << "\033[1;35mHello! \033[0m" << std::endl;
+        std::cout << "\033[1;35mHello! " << user.getFullName(user_name) << "\033[0m" << std::endl;
         std::cin.ignore();
 
         if (user_type == "Employee") {
-            Employee employee;
+            Employee employee(user_name);
             while (true) {
                 employee.employeeLandingPage();
             }
         } else if (user_type == "Chef") {
-            Chef chef;
+            Chef chef(user_name);
             while (true) {
                 chef.chefLandingPage();
             }

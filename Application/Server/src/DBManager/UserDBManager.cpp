@@ -109,3 +109,23 @@ std::vector<UserPreference> UserDBManager::fetchUserPreference(std::string user_
     }
     return userPreferences;
 }
+
+std::vector<std::string> UserDBManager::fetchAllEmployeeAndChef() {
+    std::vector<std::string> users;
+    std::string query = "SELECT user_name FROM User WHERE user_type = 'employee' OR user_type = 'chef'";
+    auto result = dbManager.fetchData(query);
+    for (auto row : result) {
+        users.push_back(row[0]);
+    }
+    return users;
+}
+
+std::vector<std::string> UserDBManager::fetchAllEmployees() {
+    std::vector<std::string> users;
+    std::string query = "SELECT user_name FROM User WHERE user_type = 'employee'";
+    auto result = dbManager.fetchData(query);
+    for (auto row : result) {
+        users.push_back(row[0]);
+    }
+    return users;
+}

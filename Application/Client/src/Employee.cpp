@@ -16,17 +16,16 @@ enum class EmployeeOptions {
     LOGOUT
 };
 
-void Employee::getNotificationIfAny() {
-    // 1. if admin add/remove menu item
-    // 2. if chef roll out next day menu
+Employee::Employee(std::string username) : logged_username(username){
 }
 
 void Employee::employeeLandingPage() {
-    getNotificationIfAny();
+    getNotificationIfAny(logged_username);
     
-    std::cout << "Employee Landing Page" << std::endl;
     std::vector<std::string> options = {"Display Menu Items", "View Specific Date Menu", "Update Profile", "View My Profile Details", "Give Vote", "Give Feedback", "Logout"};
 
+    std::cout << "Press enter to continue: ";
+    std::cin.ignore();
     int selected_option = Utils::selectOption(options);
 
     switch(static_cast<EmployeeOptions>(selected_option)) {
@@ -81,7 +80,7 @@ void Employee::updateProfile() {
     std::cout << "Enter sweet preference(1 for Sweet tooth, 2 for No Sweet tooth, 3 for No Preference): ";
     std::cin >> sweet_preference;
 
-    clientSocket.sendMessage(static_cast<int>(RequestType::UPDATE_USER_PROFILE), std::to_string(diet_preference) + "\t" + std::to_string(spice_level) + "\t" + std::to_string(prefered_cuisine) + "\t" + std::to_string(sweet_preference) + "\t" + "e"); // hardcoded user_name
+    clientSocket.sendMessage(static_cast<int>(RequestType::UPDATE_USER_PROFILE), std::to_string(diet_preference) + "\t" + std::to_string(spice_level) + "\t" + std::to_string(prefered_cuisine) + "\t" + std::to_string(sweet_preference) + "\t" + logged_username);
     std::string response = clientSocket.receiveMessage();
     response = Utils::removeResponseType(response);
     std::cout << response << std::endl;
@@ -91,7 +90,7 @@ void Employee::getUserProfileDetails() {
 
     std::cout << "\nYour existing profile details are: " << std::endl;
 
-    clientSocket.sendMessage(static_cast<int>(RequestType::GET_USER_PROFILE), "e"); // hardcoded user_name
+    clientSocket.sendMessage(static_cast<int>(RequestType::GET_USER_PROFILE), logged_username);
     std::string user_profile = clientSocket.receiveMessage();
 
     size_t tab_pos = user_profile.find('\t');
@@ -124,7 +123,7 @@ void Employee::giveVote() {
             break;
         }
 
-        clientSocket.sendMessage(static_cast<int>(RequestType::VOTE_NEXT_DAY_MENU), item_id + "\t" + "e"); // hardcoded user_name
+        clientSocket.sendMessage(static_cast<int>(RequestType::VOTE_NEXT_DAY_MENU), item_id + "\t" + logged_username);
         std::string response = clientSocket.receiveMessage();
         response = Utils::removeResponseType(response);
         std::cout << response << std::endl;
@@ -159,7 +158,7 @@ void Employee::giveFeedback() {
         std::cout << "Enter comment: ";
         std::getline(std::cin, comment);
 
-        clientSocket.sendMessage(static_cast<int>(RequestType::GIVE_FEEDBACK), vote_id + "\t" + "e" + "\t" + taste_ratings + "\t" + quality_ratings + "\t" + overall_ratings + "\t" + comment); // hardcoded user_name
+        clientSocket.sendMessage(static_cast<int>(RequestType::GIVE_FEEDBACK), vote_id + "\t" + logged_username + "\t" + taste_ratings + "\t" + quality_ratings + "\t" + overall_ratings + "\t" + comment);
         std::string response = clientSocket.receiveMessage();
         response = Utils::removeResponseType(response);
         std::cout << response << std::endl;
@@ -195,7 +194,7 @@ void Employee::getNextDayMenu() {
 }
 
 void Employee::getUserVoteList() {
-    clientSocket.sendMessage(static_cast<int>(RequestType::GET_USER_VOTE_LIST), "e"); // hardcoded user_name
+    clientSocket.sendMessage(static_cast<int>(RequestType::GET_USER_VOTE_LIST), logged_username);
     std::string user_vote_list = clientSocket.receiveMessage();
 
     size_t tab_pos = user_vote_list.find('\t');
@@ -225,7 +224,7 @@ void Employee::getUserVoteList() {
 void Employee::getRecommendationToUser() {
     std::cout << "Get Recommendation" << std::endl;
 
-    clientSocket.sendMessage(static_cast<int>(RequestType::GET_USER_RECOMMENDED_LIST), "e"); // hardcoded user_name
+    clientSocket.sendMessage(static_cast<int>(RequestType::GET_USER_RECOMMENDED_LIST), logged_username);
     std::string recommended_list = clientSocket.receiveMessage();
     recommended_list = Utils::removeResponseType(recommended_list);
 

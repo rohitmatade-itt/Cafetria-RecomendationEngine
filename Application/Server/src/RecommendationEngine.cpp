@@ -94,9 +94,7 @@ std::vector<Rollout> RecommendationEngine::recommendMenuItemsForUser(std::string
     });
 
     for (const auto& rollout : rollouts) {
-        if (calculate_score(rollout) > 0) {
-            sortedRollouts.push_back(rollout);
-        }
+        sortedRollouts.push_back(rollout);
     }
 
     return sortedRollouts;

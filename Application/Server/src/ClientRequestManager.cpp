@@ -8,6 +8,7 @@
 #include "VoteDBManager.h"
 #include "FeedbackDBManager.h"
 #include "RecommendationEngine.h"
+#include "NotificationDBManager.h"
 
 std::vector<std::string> splitStringbyTab(const std::string& str) {
     std::vector<std::string> result;
@@ -39,8 +40,14 @@ std::string ClientRequestManager::loginRequest(std::string message) {
         std::cout << "Login successful" << std::endl;
         std::string user_type = userDBManager.getUserType(user.user_name);
         std::cout << "User type: " << user_type << std::endl;
-        return user_type;
+        return user_type + "\t" + user.user_name;
     }
+}
+
+std::string ClientRequestManager::getFullNameRequest(std::string message) {
+    UserDBManager userDBManager;
+    std::string full_name = userDBManager.getFirstName(message) + " " + userDBManager.getLastName(message);
+    return full_name;
 }
 
 std::string ClientRequestManager::displayMenuRequest(std::string message) {
@@ -146,4 +153,19 @@ std::string ClientRequestManager::getUserRecommendedListRequest(std::string mess
     }
 
     return items;
+}
+
+bool ClientRequestManager::updateNotificationRequest(std::string message) {
+    NotificationDBManager userDBManager;
+    return userDBManager.addNotificationToAll(message);
+}
+
+bool ClientRequestManager::updateNotificationEmployeesRequest(std::string message) {
+    NotificationDBManager userDBManager;
+    return userDBManager.addNotificationToEmployees(message);
+}
+
+std::string ClientRequestManager::getNotificationRequest(std::string message) {
+    NotificationDBManager userDBManager;
+    return userDBManager.fetchNotification(message);
 }

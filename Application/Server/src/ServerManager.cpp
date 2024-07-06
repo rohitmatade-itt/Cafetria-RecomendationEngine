@@ -58,12 +58,17 @@ std::string ServerManager::handleClientRequest(std::string message) {
     SocketRequest request = parseSocketRequest(message);
 
     ClientRequestManager clientRequestManager;
-    std::string user_type, menu_list, user_details, report, recomended_items, rollout_status, rollout_list, votes_list;
+    std::string user, full_name, menu_list, user_details, report, recomended_items, rollout_status, rollout_list, votes_list, notification;
 
     switch (static_cast<int>(request.requestType)) {
         case static_cast<int>(RequestType::LOGIN_REQUEST):
-            user_type = clientRequestManager.loginRequest(request.message);
-            response = user_type;
+            user = clientRequestManager.loginRequest(request.message);
+            response = user;
+            break;
+
+        case static_cast<int>(RequestType::GET_FULL_NAME):
+            full_name = clientRequestManager.getFullNameRequest(request.message);
+            response = full_name;
             break;
 
         case static_cast<int>(RequestType::DISPLAY_MENU_REQUEST):
@@ -197,6 +202,33 @@ std::string ServerManager::handleClientRequest(std::string message) {
         case static_cast<int>(RequestType::GET_USER_RECOMMENDED_LIST):
             recomended_items = clientRequestManager.getUserRecommendedListRequest(request.message);
             response = recomended_items;
+            break;
+
+        case static_cast<int>(RequestType::UPDATE_NOTIFICATION_ALL):
+            if(clientRequestManager.updateNotificationRequest(request.message))
+            {
+                response = "Notification updated successfully";
+            }
+            else
+            {
+                response = "Notification not updated";
+            }
+            break;
+
+        case static_cast<int>(RequestType::UPDATE_NOTIFICATION_EMPLOYEE):
+            if(clientRequestManager.updateNotificationEmployeesRequest(request.message))
+            {
+                response = "Notification updated successfully";
+            }
+            else
+            {
+                response = "Notification not updated";
+            }
+            break;
+
+        case static_cast<int>(RequestType::GET_NOTIFICATION):
+            notification = clientRequestManager.getNotificationRequest(request.message);
+            response = notification;
             break;
             
         default:

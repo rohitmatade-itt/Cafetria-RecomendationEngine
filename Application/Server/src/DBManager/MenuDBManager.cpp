@@ -22,7 +22,7 @@ bool MenuDBManager::addMenuItem(std::string item_details) {
         item_elements.push_back(element);
     }
     
-    std::string query = "INSERT INTO Menu (item_name, cost_price, selling_price, is_available, VegNonveg, SpiceLevel, Cuisine, isSweet) VALUES ('" +
+    std::string query = "INSERT INTO Menu (item_name, cost_price, selling_price, is_available, diet_type, spice_level, cuisine_type, sweet_type) VALUES ('" +
                         item_elements[0] + "', " +
                         std::to_string(std::stof(item_elements[1])) + ", '" +
                         std::to_string(std::stof(item_elements[2])) + "', '" +

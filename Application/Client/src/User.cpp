@@ -20,6 +20,13 @@ std::string User::userLogin() {
     return login_status;
 }
 
+std::string User::getFullName(std::string username) {
+    clientSocket.sendMessage(static_cast<int>(RequestType::GET_FULL_NAME), username);
+    std::string full_name = clientSocket.receiveMessage();
+    full_name = Utils::removeResponseType(full_name);
+    return full_name;
+}
+
 void User::displayMenu() {
     std::cout << "Displaying Menu..." << std::endl << std::endl;
     clientSocket.sendMessage(static_cast<int>(RequestType::DISPLAY_MENU_REQUEST), "");
@@ -50,5 +57,36 @@ void User::viewSpecificDateMenu() {
     std::cout << "--------------------------c-" << std::endl;
     for (size_t i = 0; i < menu_item_list.size(); ++i) {
         std::cout << std::setw(2) << i + 1 << ". " << menu_item_list[i] << std::endl;
+    }
+}
+
+void User::updateNotificationToAll(std::string notification) {
+
+    clientSocket.sendMessage(static_cast<int>(RequestType::UPDATE_NOTIFICATION_ALL), notification);
+    std::string response = clientSocket.receiveMessage();
+    response = Utils::splitStringbyTab(response)[1];
+    std::cout << response << std::endl;
+}
+
+void User::updateNotificationToEmployee(std::string notification) {
+
+    clientSocket.sendMessage(static_cast<int>(RequestType::UPDATE_NOTIFICATION_EMPLOYEE), notification);
+    std::string response = clientSocket.receiveMessage();
+    response = Utils::splitStringbyTab(response)[1];
+    std::cout << response << std::endl;
+}
+
+void User::getNotificationIfAny(std::string username) {
+    clientSocket.sendMessage(static_cast<int>(RequestType::GET_NOTIFICATION), username);
+    std::string notification = clientSocket.receiveMessage();
+    notification = Utils::removeResponseType(notification);
+
+    if(notification.empty()) {
+        std::cout << "\nNo new notifications" << std::endl;
+        return;
+    }
+    else
+    {
+        std::cout << "\nNotification:\n" << "\033[33m" << notification << "\033[0m" << std::endl;
     }
 }

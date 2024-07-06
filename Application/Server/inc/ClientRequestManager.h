@@ -9,6 +9,7 @@
 class ClientRequestManager {
 public:
     std::string loginRequest(std::string message);
+    std::string getFullNameRequest(std::string message);
     std::string displayMenuRequest(std::string message);
     std::string viewSpecificDateMenuRequest(std::string message);
     bool addEmployeeRequest(std::string message);
@@ -26,6 +27,9 @@ public:
     std::string getUserProfileRequest(std::string message);
     bool updateUserProfileRequest(std::string message);
     std::string getUserRecommendedListRequest(std::string message);
+    bool updateNotificationRequest(std::string message);
+    bool updateNotificationEmployeesRequest(std::string message);
+    std::string getNotificationRequest(std::string message);
 };
 
 #endif // CLIENTREQUESTMANAGER_H

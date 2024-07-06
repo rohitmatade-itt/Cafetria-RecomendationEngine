@@ -12,8 +12,12 @@ protected:
 public:
     ClientSocket& clientSocket = ClientSocket::getInstance();
     std::string userLogin();
+    std::string getFullName(std::string username);
     void displayMenu();
     void viewSpecificDateMenu();
+    void updateNotificationToAll(std::string notification);
+    void updateNotificationToEmployee(std::string notification);
+    void getNotificationIfAny(std::string username);
 };
 
 #endif // USER_H

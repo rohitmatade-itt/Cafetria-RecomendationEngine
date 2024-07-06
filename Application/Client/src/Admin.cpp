@@ -20,6 +20,8 @@ void Admin::adminLandingPage() {
 
     std::vector<std::string> options = {"Display Menu Items", "View Specific Date Menu", "Add Menu Item", "Remove Menu Item", "Add Employee", "Remove Employee", "Logout"};
 
+    std::cout << "Press enter to continue: ";
+    std::cin.ignore();
     int selected_option = Utils::selectOption(options);
     
     switch(static_cast<AdminOptions>(selected_option)) {
@@ -130,7 +132,8 @@ bool Admin::addMenuItem() {
     std::string add_menu_item_status = clientSocket.receiveMessage();
     add_menu_item_status = Utils::splitStringbyTab(add_menu_item_status)[1];
     if(add_menu_item_status == "Menu item added successfully") {
-        std::cout << "Menu item " << item_name << " Added Successfully" << std::endl;
+        std::cout << "\nMenu item " << item_name << " Added Successfully" << std::endl;
+        updateNotificationToAll("New Menu Item Added: " + item_name);
     } else {
         std::cout << "Error Adding Menu item" << std::endl;
     }
@@ -149,6 +152,7 @@ bool Admin::removeMenuItem() {
     remove_menu_item_status = Utils::splitStringbyTab(remove_menu_item_status)[1];
     if(remove_menu_item_status == "Menu item removed successfully") {
         std::cout << "Menu Item " << menu_item << " Removed Successfully" << std::endl;
+        updateNotificationToAll("Menu Item Removed: " + menu_item);
     } else {
         std::cout << "Error Removing Menu item" << std::endl;
     }

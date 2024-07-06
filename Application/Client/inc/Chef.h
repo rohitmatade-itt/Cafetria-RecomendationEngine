@@ -4,9 +4,11 @@
 #include "User.h"
 
 class Chef : public User {
+private:
+    std::string logged_username;
 public:
+    Chef(std::string username);
     void chefLandingPage();
-    void getNotificationIfAny();
     void getRecomondation(int count);
     // void generateReport();
     void rolloutNextDayMenu();
