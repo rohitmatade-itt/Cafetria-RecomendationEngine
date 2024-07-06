@@ -10,6 +10,7 @@ public:
     bool addMenuItem(std::string item_details);
     bool removeMenuItem(std::string item_name);
     std::vector<MenuItem> fetchMenuItems();
+    std::string getItemName(int item_id);
 private:
     DatabaseManager dbManager;
 };

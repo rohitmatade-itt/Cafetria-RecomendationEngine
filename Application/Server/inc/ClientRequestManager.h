@@ -2,6 +2,9 @@
 #define CLIENTREQUESTMANAGER_H
 
 #include <string>
+#include <vector>
+
+#include "RecommendationDTO.h"
 
 class ClientRequestManager {
 public:
@@ -22,6 +25,7 @@ public:
     std::string getUserVoteListRequest(std::string message);
     std::string getUserProfileRequest(std::string message);
     bool updateUserProfileRequest(std::string message);
+    std::string getUserRecommendedListRequest(std::string message);
 };
 
 #endif // CLIENTREQUESTMANAGER_H

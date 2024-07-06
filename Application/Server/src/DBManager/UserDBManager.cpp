@@ -1,6 +1,7 @@
 #include <sstream>
 
 #include "UserDBManager.h"
+#include "RecommendationDTO.h"
 
 bool UserDBManager::addUser(std::string user_details) {
     std::vector<std::string> user_elements;
@@ -90,4 +91,21 @@ bool UserDBManager::updateUserProfile(std::string message) {
         return true;
     }
     return false;
+}
+
+std::vector<UserPreference> UserDBManager::fetchUserPreference(std::string user_name) {
+    std::vector<UserPreference> userPreferences;
+    std::string query = "SELECT diet_preference, spice_level, preferred_cuisine, sweet_preference FROM User WHERE user_name = '" + user_name + "'";
+    auto result = dbManager.fetchData(query);
+    for (auto row : result) {
+        UserPreference userPreference;
+
+        userPreference.diet_preference = row[0];
+        userPreference.spice_level = row[1];
+        userPreference.prefered_cuisine = row[2];
+        userPreference.sweet_preference = row[3];
+
+        userPreferences.push_back(userPreference);
+    }
+    return userPreferences;
 }

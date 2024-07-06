@@ -66,3 +66,10 @@ std::vector<MenuItem> MenuDBManager::fetchMenuItems()
     }
     return menuItems;
 }
+
+std::string MenuDBManager::getItemName(int item_id)
+{
+    std::string query = "SELECT item_name FROM Menu WHERE item_id = " + std::to_string(item_id);
+    auto result = dbManager.fetchData(query);
+    return result[0][0];
+}

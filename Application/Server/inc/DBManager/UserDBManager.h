@@ -2,6 +2,7 @@
 #define USER_DBMANAGER_H
 
 #include "DatabaseManager.h"
+#include "RecommendationDTO.h"
 
 class UserDBManager {
 public:
@@ -13,6 +14,7 @@ public:
     std::string getUserType(const std::string& userName);
     std::string getUserProfile(const std::string& userName);
     bool updateUserProfile(std::string message);
+    std::vector<UserPreference> fetchUserPreference(std::string userName);
 
 private:
     DatabaseManager dbManager;

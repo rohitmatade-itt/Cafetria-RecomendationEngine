@@ -61,7 +61,7 @@ void Employee::employeeLandingPage() {
         default:
             break;
     }
-    std::cout << "Press any key to go back: ";
+    std::cout << "Press Enter to go back: ";
     std::cin.ignore();
 }
 
@@ -114,7 +114,7 @@ void Employee::getUserProfileDetails() {
 void Employee::giveVote() {
     std::cout << "Give Vote" << std::endl;
     getNextDayMenu();
-    
+    getRecommendationToUser();
     std::string item_id;
     while (true)
     {
@@ -219,5 +219,31 @@ void Employee::getUserVoteList() {
                       << std::setw(11) << item_details[2] << " |" << std::endl;
         }
     }
+    std::cout << "+----------+----------------+-------------+" << std::endl;
+}
+
+void Employee::getRecommendationToUser() {
+    std::cout << "Get Recommendation" << std::endl;
+
+    clientSocket.sendMessage(static_cast<int>(RequestType::GET_USER_RECOMMENDED_LIST), "e"); // hardcoded user_name
+    std::string recommended_list = clientSocket.receiveMessage();
+    recommended_list = Utils::removeResponseType(recommended_list);
+
+    std::cout << "Recommended List" << std::endl;
+    auto menu_items = Utils::splitStringbyNewline(recommended_list);
+
+    std::cout << "+----------+----------------+-------------+" << std::endl;
+    std::cout << "| Item ID  | Item Name      | Meal Type   |" << std::endl;
+    std::cout << "+----------+----------------+-------------+" << std::endl;
+    
+    for(auto menu_item : menu_items) {
+        std::vector<std::string> item_details = Utils::splitStringbyTab(menu_item);
+        if(item_details.size() >= 3) {
+            std::cout << "| " << std::setw(8) << item_details[0] << " | " 
+                      << std::setw(14) << item_details[1] << " | " 
+                      << std::setw(11) << item_details[2] << " |" << std::endl;
+        }
+    }
+
     std::cout << "+----------+----------------+-------------+" << std::endl;
 }

@@ -22,7 +22,7 @@ void DatabaseManager::connect() {
         mySqlConnection->setSchema(DATABASE);
     } catch (sql::SQLException& e) {
         std::cerr << "Error connecting to MySQL: " << e.what() << std::endl;
-        throw; // Rethrow the exception to indicate failure to connect
+        throw;
     }
 }
 

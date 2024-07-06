@@ -1,6 +1,7 @@
 #include <sstream>
 
 #include "RollOutDBManager.h"
+#include "RecommendationDTO.h"
 
 std::vector<std::string> RollOutDBManager::getRollOutByDate(std::string date)
 {
@@ -73,3 +74,27 @@ std::string RollOutDBManager::getRolloutMenu(std::string message)
 //     }
 //     return "Hi";
 // }
+
+std::vector<Rollout> RollOutDBManager::fetchRollouts()
+{
+    std::vector<Rollout> rollouts;
+    std::string query = "SELECT rm.item_id, rm.meal_type, m.diet_type, m.spice_level, m.cuisine_type, m.sweet_type "
+                        "FROM RolloutMenu rm "
+                        "JOIN Menu m ON rm.item_id = m.item_id "
+                        "WHERE rm.rollout_date = DATE_ADD(CURRENT_DATE, INTERVAL 1 DAY)";
+
+    auto result = dbManager.fetchData(query);
+    for (auto row : result) {
+        Rollout rollout;
+
+        rollout.item_id = row[0];
+        rollout.meal_type = row[1];
+        rollout.diet_type = row[2];
+        rollout.spice_level = row[3];
+        rollout.cuisine_type = row[4];
+        rollout.sweet_type = row[5];
+        
+        rollouts.push_back(rollout);
+    }
+    return rollouts; 
+}

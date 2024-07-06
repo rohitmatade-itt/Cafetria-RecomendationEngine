@@ -193,6 +193,11 @@ std::string ServerManager::handleClientRequest(std::string message) {
                 response = "User profile not updated";
             }
             break;
+        
+        case static_cast<int>(RequestType::GET_USER_RECOMMENDED_LIST):
+            recomended_items = clientRequestManager.getUserRecommendedListRequest(request.message);
+            response = recomended_items;
+            break;
             
         default:
             std::cerr << "Invalid request type: " << request.requestType << std::endl;

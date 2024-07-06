@@ -133,3 +133,17 @@ bool ClientRequestManager::updateUserProfileRequest(std::string message) {
     UserDBManager userDBManager;
     return userDBManager.updateUserProfile(message);
 }
+
+std::string ClientRequestManager::getUserRecommendedListRequest(std::string message) {
+    RecommendationEngine userEngine("sentiment_words.txt");
+    std::vector<Rollout> rollout = userEngine.recommendMenuItemsForUser(message);
+    std::string items;
+
+    MenuDBManager menuDBManager;
+
+    for (const auto& item : rollout) {
+        items += item.item_id + "\t" + menuDBManager.getItemName(std::stoi(item.item_id)) + "\t" + item.meal_type + "\n";
+    }
+
+    return items;
+}

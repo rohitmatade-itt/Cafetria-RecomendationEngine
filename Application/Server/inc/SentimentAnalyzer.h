@@ -12,6 +12,7 @@ class SentimentAnalyzer {
 public:
     SentimentAnalyzer(const std::string& filename);
 
+
     int calculateSentimentScore(const std::string& review);
 
 private:

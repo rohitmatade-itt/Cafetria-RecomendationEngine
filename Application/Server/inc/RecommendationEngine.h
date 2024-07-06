@@ -13,11 +13,14 @@ class RecommendationEngine {
 public:
     RecommendationEngine(const std::string& sentimentFile);
     std::string recommendMenuItems(int count);
+    std::vector<Rollout> recommendMenuItemsForUser(std::string message);
 
 private:
     SentimentAnalyzer analyzer;
     std::vector<Feedback> feedbacks;
     std::vector<MenuItem> menuItems;
+    std::vector<Rollout> rollouts;
+    std::vector<UserPreference> user_preference;
 
     std::string getRecommendations(const std::vector<std::tuple<int, std::string, double, double>>& averageScores, int count);
 };
