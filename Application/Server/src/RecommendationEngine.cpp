@@ -60,56 +60,44 @@ std::string RecommendationEngine::getRecommendations(const std::vector<std::tupl
 
 std::vector<Rollout> RecommendationEngine::recommendMenuItemsForUser(std::string user_name) {
     RollOutDBManager rolloutDBManager;
-    rollouts = rolloutDBManager.fetchRollouts();
+    auto rollouts = rolloutDBManager.fetchRollouts();
 
     UserDBManager userDBManager;
-    user_preference = userDBManager.fetchUserPreference(user_name);
+    auto user_preference = userDBManager.fetchUserPreference(user_name)[0];
 
     std::vector<Rollout> sortedRollouts;
-    for (const auto& rollout : rollouts) {
-        if (rollout.diet_type != user_preference[0].diet_preference) {
-            sortedRollouts.push_back(rollout);
 
-            //remove from existing rollout list
-            sortedRollouts.erase(std::remove_if(sortedRollouts.begin(), sortedRollouts.end(), [&](const Rollout& rollout) {
-                return rollout.diet_type == user_preference[0].diet_preference;
-            }), sortedRollouts.end());
+    const int diet_weight = 4;
+    const int spice_weight = 3;
+    const int cuisine_weight = 2;
+    const int sweet_weight = 1;
+
+    auto calculate_score = [&](const Rollout& rollout) {
+        int score = 0;
+        if (rollout.diet_type == user_preference.diet_preference) {
+            score += diet_weight;
         }
-    }
-    for (const auto& rollout : rollouts) {
-        if (rollout.spice_level != user_preference[0].spice_level) {
-            sortedRollouts.push_back(rollout);
-
-            //remove from existing rollout list
-            sortedRollouts.erase(std::remove_if(sortedRollouts.begin(), sortedRollouts.end(), [&](const Rollout& rollout) {
-                return rollout.spice_level == user_preference[0].spice_level;
-            }), sortedRollouts.end());
+        if (rollout.spice_level == user_preference.spice_level) {
+            score += spice_weight;
         }
-    }
-
-    for (const auto& rollout : rollouts) {
-        if (rollout.cuisine_type != user_preference[0].prefered_cuisine) {
-            sortedRollouts.push_back(rollout);
-
-            //remove from existing rollout list
-            sortedRollouts.erase(std::remove_if(sortedRollouts.begin(), sortedRollouts.end(), [&](const Rollout& rollout) {
-                return rollout.cuisine_type == user_preference[0].prefered_cuisine;
-            }), sortedRollouts.end());
+        if (rollout.cuisine_type == user_preference.prefered_cuisine) {
+            score += cuisine_weight;
         }
-    }
+        if (rollout.sweet_type == user_preference.sweet_preference) {
+            score += sweet_weight;
+        }
+        return score;
+    };
+
+    std::sort(rollouts.begin(), rollouts.end(), [&](const Rollout& a, const Rollout& b) {
+        return calculate_score(a) > calculate_score(b);
+    });
 
     for (const auto& rollout : rollouts) {
-        if (rollout.sweet_type != user_preference[0].sweet_preference) {
+        if (calculate_score(rollout) > 0) {
             sortedRollouts.push_back(rollout);
-
-            //remove from existing rollout list
-            sortedRollouts.erase(std::remove_if(sortedRollouts.begin(), sortedRollouts.end(), [&](const Rollout& rollout) {
-                return rollout.sweet_type == user_preference[0].sweet_preference;
-            }), sortedRollouts.end());
         }
     }
-
-    std::reverse(sortedRollouts.begin(), sortedRollouts.end());
 
     return sortedRollouts;
 }
