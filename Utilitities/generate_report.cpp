@@ -4,9 +4,8 @@
 #include <vector>
 #include <unordered_map>
 #include <numeric>
-#include <memory> // Include for std::unique_ptr
-#include <mysql_driver.h> // Include MySQL C++ Connector headers
-#include <mysql_connection.h>
+#include <memory> 
+
 #include <cppconn/driver.h>
 #include <cppconn/exception.h>
 #include <cppconn/resultset.h>
@@ -24,7 +23,6 @@ struct Feedback {
 struct Vote {
     int item_id;
     std::string date;
-    bool status;
 };
 
 struct MenuItem {
@@ -34,7 +32,7 @@ struct MenuItem {
     double selling_price;
 };
 
-std::vector<Feedback> fetchFeedbackFromDB(const std::string& startDate, const std::string& endDate) {
+std::vector<Feedback> fetchFeedback(const std::string& startDate, const std::string& endDate) {
     std::vector<Feedback> feedbacks;
     try {
         sql::Driver *driver = get_driver_instance();
@@ -74,7 +72,7 @@ std::vector<Vote> fetchVotesFromDB(const std::string& startDate, const std::stri
         con->setSchema("cafeteria");
 
         std::unique_ptr<sql::PreparedStatement> pstmt(con->prepareStatement(
-            "SELECT item_id, date, status FROM Vote WHERE date BETWEEN ? AND ?"));
+            "SELECT item_id, date FROM Vote WHERE date BETWEEN ? AND ?"));
         pstmt->setString(1, startDate);
         pstmt->setString(2, endDate);
 
@@ -84,7 +82,6 @@ std::vector<Vote> fetchVotesFromDB(const std::string& startDate, const std::stri
             Vote vote;
             vote.item_id = res->getInt("item_id");
             vote.date = res->getString("date");
-            vote.status = res->getBoolean("status");
             votes.push_back(vote);
         }
     } catch (sql::SQLException &e) {
@@ -96,7 +93,7 @@ std::vector<Vote> fetchVotesFromDB(const std::string& startDate, const std::stri
     return votes;
 }
 
-std::vector<MenuItem> fetchMenuItemsFromDB() {
+std::vector<MenuItem> fetchMenuItems() {
     std::vector<MenuItem> menuItems;
     try {
         sql::Driver *driver = get_driver_instance();
@@ -136,9 +133,7 @@ void generateReport(const std::vector<Feedback>& feedbacks, const std::vector<Vo
     }
 
     for (const auto& vote : votes) {
-        if (vote.status) {
-            voteCountMap[vote.item_id]++;
-        }
+        voteCountMap[vote.item_id]++;
     }
 
     std::cout << "+----------------------+-------+---------------------+----------------------+----------------------+---------------+" << std::endl;
@@ -174,11 +169,10 @@ int main() {
     std::cout << "Enter end date (YYYY-MM-DD): ";
     std::cin >> endDate;
 
-    std::vector<Feedback> feedbacks = fetchFeedbackFromDB(startDate, endDate);
-    std::vector<Vote> votes = fetchVotesFromDB(startDate, endDate);
-    std::vector<MenuItem> menuItems = fetchMenuItemsFromDB();
+    std::vector<Feedback> feedbacks = fetchFeedback(startDate, endDate);
+    std::vector<Vote> votes = fetchVotes(startDate, endDate);
+    std::vector<MenuItem> menuItems = fetchMenuItems();
 
     generateReport(feedbacks, votes, menuItems);
-
     return 0;
 }
