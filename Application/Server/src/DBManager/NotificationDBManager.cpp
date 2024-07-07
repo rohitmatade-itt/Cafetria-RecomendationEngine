@@ -10,8 +10,6 @@ std::string NotificationDBManager::fetchNotification(std::string username) {
 
     auto result = dbManager.fetchData(query);
 
-    std::cout << "Query: " << query << std::endl;
-
     for (auto row : result) {
         notifications += row[0] + "\n";
         std::cout << "row[0]: " << row[0] << "\n";

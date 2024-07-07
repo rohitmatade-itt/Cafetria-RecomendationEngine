@@ -60,8 +60,6 @@ void Employee::employeeLandingPage() {
         default:
             break;
     }
-    std::cout << "Press Enter to go back: ";
-    std::cin.ignore();
 }
 
 void Employee::updateProfile() {
