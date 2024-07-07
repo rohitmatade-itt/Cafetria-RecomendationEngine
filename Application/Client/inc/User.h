@@ -22,6 +22,8 @@ public:
     void updateNotificationToAll(std::string notification);
     void updateNotificationToEmployee(std::string notification);
     void getNotificationIfAny(std::string username);
+    void viewFeedbackRatings();
+    void displayFeedback(std::string feedback);
 };
 
 #endif // USER_H

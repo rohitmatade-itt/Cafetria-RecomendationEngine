@@ -62,3 +62,19 @@ std::string FeedbackDBManager::getDiscardedMenuItems()
     }
     return discarded_items;
 }
+
+std::string FeedbackDBManager::getParticularItemsFeedback(std::string item_name)
+{
+    std::string query = "SELECT f.taste_ratings, f.quality_ratings, f.overall_ratings, f.comment "
+                    "FROM Feedback f "
+                    "JOIN Menu m ON f.item_id = m.item_id "
+                    "WHERE m.item_name = '" + item_name + "'";
+
+    auto result = dbManager.fetchData(query);
+    
+    std::string feedback;
+    for (auto row : result) {
+        feedback += row[0] + "\t" + row[1] + "\t" + row[2] + "\t" + row[3] + "\n";
+    }
+    return feedback;
+}

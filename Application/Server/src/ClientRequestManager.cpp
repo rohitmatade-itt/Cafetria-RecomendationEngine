@@ -170,3 +170,8 @@ std::string ClientRequestManager::getDiscardedMenuItemsRequest() {
     FeedbackDBManager feedbackDBManager;
     return feedbackDBManager.getDiscardedMenuItems();
 }
+
+std::string ClientRequestManager::viewFeedbackAndRatingsRequest(std::string item_name) {
+    FeedbackDBManager feedbackDBManager;
+    return feedbackDBManager.getParticularItemsFeedback(item_name);
+}

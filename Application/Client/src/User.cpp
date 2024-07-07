@@ -1,6 +1,7 @@
 #include <iostream>
 #include <iomanip>
 #include <regex>
+
 #include "User.h"
 #include "ClientSocket.h"
 #include "SocketProtocol.h"
@@ -152,4 +153,42 @@ void User::getNotificationIfAny(std::string username) {
     } catch (...) {
         std::cerr << "An unknown error occurred while getting notification" << std::endl;
     }
+}
+
+void User::viewFeedbackRatings() {
+    try {
+        displayMenu();
+        std::string item_name = getInput("Enter the item name for which you want to view feedback and ratings: ");
+        clientSocket.sendMessage(static_cast<int>(RequestType::VIEW_FEEDBACK), item_name);
+        std::string feedback = clientSocket.receiveMessage();
+        feedback = Utils::removeResponseType(feedback);
+
+        std::cout << "Feedback and Ratings for " << item_name << ":" << std::endl;
+        displayFeedback(feedback);
+    } catch (const std::exception& e) {
+        std::cerr << "An error occurred while viewing feedback and ratings: " << e.what() << std::endl;
+    } catch (...) {
+        std::cerr << "An unknown error occurred while viewing feedback and ratings" << std::endl;
+    }
+}
+
+void User::displayFeedback(std::string feedback) {
+    std::cout << "+--------------+----------------+----------------+-------------------------------------------------------------------------+" << std::endl;
+    std::cout << "| Taste Rating | Quality Rating | Overall Rating |                                  Feedback                               |" << std::endl;
+    std::cout << "+--------------+----------------+----------------+-------------------------------------------------------------------------+" << std::endl;
+
+    auto feedback_list = Utils::splitStringbyNewline(feedback);
+
+    for (const auto& feedback : feedback_list) {
+        std::vector<std::string> feedback_details = Utils::splitStringbyTab(feedback);
+        if (feedback_details.size() >= 4) {
+            std::cout << "| " << std::setw(12) << feedback_details[0] << " | "
+                        << std::setw(14) << feedback_details[1] << " | "
+                        << std::setw(14) << feedback_details[2] << " | "
+                        << std::setw(71) << feedback_details[3] << " |" << std::endl;
+        }
+    }
+
+    std::cout << "+--------------+----------------+----------------+-------------------------------------------------------------------------+" << std::endl;
+    std::cin.ignore();
 }

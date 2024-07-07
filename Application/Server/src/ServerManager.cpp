@@ -230,6 +230,11 @@ std::string ServerManager::handleClientRequest(std::string message) {
             menu_list = clientRequestManager.getDiscardedMenuItemsRequest();
             response = menu_list;
             break;
+
+        case static_cast<int>(RequestType::VIEW_FEEDBACK):
+            report = clientRequestManager.viewFeedbackAndRatingsRequest(request.message);
+            response = report;
+            break;
             
         default:
             std::cerr << "Invalid request type: " << request.requestType << std::endl;

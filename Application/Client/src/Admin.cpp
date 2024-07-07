@@ -9,6 +9,7 @@
 enum class AdminOptions {
     DISPLAY_MENU,
     VIEW_SPECIFIC_DATE_MENU,
+    VIEW_FEEDBACK_RATINGS,
     ADD_MENU_ITEM,
     REMOVE_MENU_ITEM,
     ADD_EMPLOYEE,
@@ -19,7 +20,7 @@ enum class AdminOptions {
 
 void Admin::adminLandingPage() {
     try {
-        std::vector<std::string> options = {"Display Menu Items", "View Specific Date Menu", "Add Menu Item", "Remove Menu Item", "Add Employee", "Remove Employee", "View Discarded Menu Item", "Logout"};
+        std::vector<std::string> options = {"Display Menu Items", "View Specific Date Menu", "View Feedback & Ratings", "Add Menu Item", "Remove Menu Item", "Add Employee", "Remove Employee", "View Discarded Menu Item", "Logout"};
 
         std::cout << "Press enter to continue: ";
         std::cin.ignore();
@@ -31,6 +32,9 @@ void Admin::adminLandingPage() {
                 break;
             case AdminOptions::VIEW_SPECIFIC_DATE_MENU:
                 viewSpecificDateMenu();
+                break;
+            case AdminOptions::VIEW_FEEDBACK_RATINGS:
+                viewFeedbackRatings();
                 break;
             case AdminOptions::ADD_EMPLOYEE:
                 handleAddEmployee();

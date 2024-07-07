@@ -16,7 +16,6 @@ public:
     bool removeEmployeeRequest(std::string message);
     bool addMenuItemRequest(std::string message);
     bool removeMenuItemRequest(std::string message);
-    // std::string generateReportRequest(std::string message);
     std::string getRecommendedListRequest(std::string message);
     bool rolloutNextDayMenuRequest(std::string message);
     std::string getNextDayMenuRequest(std::string message);
@@ -31,6 +30,7 @@ public:
     bool updateNotificationEmployeesRequest(std::string message);
     std::string getNotificationRequest(std::string message);
     std::string getDiscardedMenuItemsRequest();
+    std::string viewFeedbackAndRatingsRequest(std::string message);
 };
 
 #endif // CLIENTREQUESTMANAGER_H

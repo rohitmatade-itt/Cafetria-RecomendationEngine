@@ -12,6 +12,7 @@ public:
     std::vector<Feedback> fetchFeedback();
     bool addFeedback(std::string message);
     std::string getDiscardedMenuItems();
+    std::string getParticularItemsFeedback(std::string item_name);
 private:
     DatabaseManager dbManager;
 };

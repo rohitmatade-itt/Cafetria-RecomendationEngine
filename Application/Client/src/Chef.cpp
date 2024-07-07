@@ -12,6 +12,7 @@ enum class ChefOptions {
     VIEW_SPECIFIC_DATE_MENU,
     ROLLOUT_NEXT_DAY_MENU,
     VIEW_NEXT_DAY_VOTES,
+    VIEW_FEEDBACK_RATINGS,
     LOGOUT
 };
 
@@ -20,7 +21,7 @@ Chef::Chef(std::string username) : logged_username(username) {
 
 void Chef::chefLandingPage() {
     try {
-        std::vector<std::string> options = {"Display Menu Items", "View Specific Date Menu", "Rollout Next Day Menu", "View Next Day Votes", "Logout"};
+        std::vector<std::string> options = {"Display Menu Items", "View Specific Date Menu", "Rollout Next Day Menu", "View Next Day Votes", "View Feedback & Ratings", "Logout"};
 
         std::cout << "Press enter to continue: ";
         std::cin.ignore();
@@ -41,6 +42,10 @@ void Chef::chefLandingPage() {
 
             case ChefOptions::VIEW_NEXT_DAY_VOTES:
                 viewNextDayVotes();
+                break;
+
+            case ChefOptions::VIEW_FEEDBACK_RATINGS:
+                viewFeedbackRatings();
                 break;
 
             case ChefOptions::LOGOUT:
