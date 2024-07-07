@@ -49,11 +49,11 @@ void Admin::adminLandingPage() {
             default:
                 std::cout << "Invalid Option" << std::endl;
                 break;
-        }
-        std::cout << "Press Enter to go back: ";
-        std::cin.ignore();
+        };
     } catch (const std::exception& e) {
         std::cerr << "An error occurred: " << e.what() << std::endl;
+    } catch (...) {
+        std::cerr << "An unknown error occurred" << std::endl;
     }
 }
 
@@ -70,16 +70,15 @@ void Admin::handleAddEmployee() {
         }
     } catch (const std::exception& e) {
         std::cerr << "An error occurred while adding employee: " << e.what() << std::endl;
+    } catch (...) {
+        std::cerr << "An unknown error occurred while adding employee" << std::endl;
     }
 }
 
 void Admin::handleRemoveEmployee() {
     try {
-        std::string employee_id;
-        std::cout << "Remove Employee" << std::endl;
-        std::cout << "Enter Employee ID: ";
-        std::cin >> employee_id;
-
+        std::string employee_id = getInput("Enter Employee ID: ");
+        
         clientSocket.sendMessage(static_cast<int>(RequestType::REMOVE_EMPLOYEE_REQUEST), employee_id);
         std::string remove_employee_status = clientSocket.receiveMessage();
         remove_employee_status = Utils::splitStringbyTab(remove_employee_status)[1];
@@ -90,6 +89,8 @@ void Admin::handleRemoveEmployee() {
         }
     } catch (const std::exception& e) {
         std::cerr << "An error occurred while removing employee: " << e.what() << std::endl;
+    } catch (...) {
+        std::cerr << "An unknown error occurred while removing employee" << std::endl;
     }
 }
 
@@ -107,16 +108,15 @@ void Admin::handleAddMenuItem() {
         }
     } catch (const std::exception& e) {
         std::cerr << "An error occurred while adding menu item: " << e.what() << std::endl;
+    } catch (...) {
+        std::cerr << "An unknown error occurred while adding menu item" << std::endl;
     }
 }
 
 void Admin::handleRemoveMenuItem() {
     try {
-        std::cout << "Remove Menu Item" << std::endl;
-        std::cout << "Select Menu Item to Remove" << std::endl;
-        std::string menu_item;
-        std::getline(std::cin, menu_item);
-
+        std::string menu_item = getInput("Enter the item name to remove: ");
+        
         clientSocket.sendMessage(static_cast<int>(RequestType::REMOVE_MENU_ITEM_REQUEST), menu_item);
         std::string remove_menu_item_status = clientSocket.receiveMessage();
         remove_menu_item_status = Utils::splitStringbyTab(remove_menu_item_status)[1];
@@ -128,44 +128,34 @@ void Admin::handleRemoveMenuItem() {
         }
     } catch (const std::exception& e) {
         std::cerr << "An error occurred while removing menu item: " << e.what() << std::endl;
+    } catch (...) {
+        std::cerr << "An unknown error occurred while removing menu item" << std::endl;
     }
 }
 
 std::string Admin::getEmployeeDetails() {
-    std::string employee_id, first_name, last_name, user_name;
-
-    std::cout << "Enter Employee Details" << std::endl;
-    std::cout << "Username: ";
-    std::cin >> user_name;
-    std::cout << "Employee ID: ";
-    std::cin >> employee_id;
-    std::cout << "First Name: ";
-    std::cin >> first_name;
+    std::string user_name = getInput("Enter Username: ");
+    std::string employee_id = getInput("Enter Employee ID: ");
+    std::string first_name = getInput("Enter First Name: ");
+    std::cout << "Enter Last Name: ";
+    std::string last_name;
     std::cin.ignore();
-    std::cout << "Last Name: ";
     std::getline(std::cin, last_name);
 
     return user_name + "\t" + first_name + "\t" + last_name + "\t" + employee_id;
 }
 
 std::string Admin::getMenuItemDetails() {
-    std::string item_name = getItemName();
+    std::string item_name = getInput("Item Name: ");
     double cost_price = getCostPrice();
     double selling_price = getSellingPrice();
-    bool availablity_status = getAvailabilityStatus();
+    bool availability_status = getAvailabilityStatus();
     int food_type = getFoodType();
     int spice_level = getSpiceLevel();
     int cuisine_type = getCuisineType();
     bool is_sweet = getIsSweet();
 
-    return item_name + "\t" + std::to_string(cost_price) + "\t" + std::to_string(selling_price) + "\t" + std::to_string(availablity_status) + "\t" + std::to_string(food_type) + "\t" + std::to_string(spice_level) + "\t" + std::to_string(cuisine_type) + "\t" + std::to_string(is_sweet);
-}
-
-std::string Admin::getItemName() {
-    std::string item_name;
-    std::cout << "Item Name: ";
-    std::getline(std::cin, item_name);
-    return item_name;
+    return item_name + "\t" + std::to_string(cost_price) + "\t" + std::to_string(selling_price) + "\t" + std::to_string(availability_status) + "\t" + std::to_string(food_type) + "\t" + std::to_string(spice_level) + "\t" + std::to_string(cuisine_type) + "\t" + std::to_string(is_sweet);
 }
 
 double Admin::getCostPrice() {
@@ -197,17 +187,17 @@ double Admin::getSellingPrice() {
 }
 
 bool Admin::getAvailabilityStatus() {
-    bool availablity_status;
+    bool availability_status;
     while (true) {
         std::cout << "Availability Status (1 for available, 0 for not available): ";
-        if (std::cin >> availablity_status) break;
+        if (std::cin >> availability_status) break;
         else {
             std::cerr << "Invalid input for Availability Status. Please enter 0 or 1.\n";
             std::cin.clear();
             std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
         }
     }
-    return availablity_status;
+    return availability_status;
 }
 
 int Admin::getFoodType() {
