@@ -165,3 +165,8 @@ std::string ClientRequestManager::getNotificationRequest(std::string message) {
     NotificationDBManager userDBManager;
     return userDBManager.fetchNotification(message);
 }
+
+std::string ClientRequestManager::getDiscardedMenuItemsRequest() {
+    FeedbackDBManager feedbackDBManager;
+    return feedbackDBManager.getDiscardedMenuItems();
+}

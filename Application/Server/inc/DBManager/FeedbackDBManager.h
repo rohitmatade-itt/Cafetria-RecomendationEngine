@@ -11,6 +11,7 @@ class FeedbackDBManager
 public:
     std::vector<Feedback> fetchFeedback();
     bool addFeedback(std::string message);
+    std::string getDiscardedMenuItems();
 private:
     DatabaseManager dbManager;
 };

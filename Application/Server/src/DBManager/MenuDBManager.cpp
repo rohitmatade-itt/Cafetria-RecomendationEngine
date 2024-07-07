@@ -41,13 +41,15 @@ bool MenuDBManager::addMenuItem(std::string item_details) {
 }
 
 bool MenuDBManager::removeMenuItem(std::string item_name) {
-    bool response;
-    std::string query = "DELETE FROM Menu WHERE item_name = '" + item_name + "'";
-    if (dbManager.executeUpdate(query)) {
+    bool response = false;
+    std::string deleteFeedback = "DELETE FROM Feedback WHERE item_id = (SELECT item_id FROM Menu WHERE item_name = '" + item_name + "');";
+    std::string deleteVote = "DELETE FROM Vote WHERE item_id = (SELECT item_id FROM Menu WHERE item_name = '" + item_name + "');";
+    std::string deleteMenu = "DELETE FROM Menu WHERE item_name = '" + item_name + "';";
+    
+    if (dbManager.executeUpdate(deleteFeedback) && dbManager.executeUpdate(deleteVote) && dbManager.executeUpdate(deleteMenu)) {
         response = true;
-    } else {
-        response = false;
     }
+
     return response;
 }
 

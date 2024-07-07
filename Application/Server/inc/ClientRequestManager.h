@@ -30,6 +30,7 @@ public:
     bool updateNotificationRequest(std::string message);
     bool updateNotificationEmployeesRequest(std::string message);
     std::string getNotificationRequest(std::string message);
+    std::string getDiscardedMenuItemsRequest();
 };
 
 #endif // CLIENTREQUESTMANAGER_H

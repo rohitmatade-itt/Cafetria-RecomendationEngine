@@ -56,7 +56,7 @@ std::string VoteDBManager::getUserVoteList(std::string message) {
         elements.push_back(element);
     }
 
-    std::string query = "SELECT vote_id, item_name, date "
+    std::string query = "SELECT item_id, item_name, date "
                         "FROM Vote v "
                         "JOIN Menu m ON v.item_id = m.item_id "
                         "WHERE user_name = '" + elements[0] + "'";

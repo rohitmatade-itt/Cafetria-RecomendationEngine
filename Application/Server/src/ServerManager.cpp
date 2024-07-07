@@ -225,6 +225,11 @@ std::string ServerManager::handleClientRequest(std::string message) {
             notification = clientRequestManager.getNotificationRequest(request.message);
             response = notification;
             break;
+
+        case static_cast<int>(RequestType::GET_DISCARDED_MENU_ITEMS):
+            menu_list = clientRequestManager.getDiscardedMenuItemsRequest();
+            response = menu_list;
+            break;
             
         default:
             std::cerr << "Invalid request type: " << request.requestType << std::endl;

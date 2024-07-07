@@ -34,7 +34,7 @@ bool FeedbackDBManager::addFeedback(std::string message)
         elements.push_back(element);
     }
 
-    std::string query = "INSERT INTO Feedback (vote_id, user_name, date, taste_ratings, quality_ratings, overall_ratings, comment) VALUES ('" + elements[0] + "', '" + elements[1] + "', CURRENT_DATE, '" + elements[2] + "', '" + elements[3] + "', '" + elements[4] + "', '" + elements[5] + "')";
+    std::string query = "INSERT INTO Feedback (item_id, user_name, date, taste_ratings, quality_ratings, overall_ratings, comment) VALUES ('" + elements[0] + "', '" + elements[1] + "', CURRENT_DATE, '" + elements[2] + "', '" + elements[3] + "', '" + elements[4] + "', '" + elements[5] + "')";
     if(dbManager.executeUpdate(query)) {
         response = true;
     } else {
@@ -42,4 +42,23 @@ bool FeedbackDBManager::addFeedback(std::string message)
     }
 
     return response;
+}
+
+std::string FeedbackDBManager::getDiscardedMenuItems()
+{
+    std::string query = "SELECT m.item_name "
+                    "FROM Feedback f "
+                    "JOIN Menu m ON f.item_id = m.item_id "
+                    "GROUP BY m.item_name "
+                    "HAVING AVG(f.taste_ratings) < 2 "
+                    "AND AVG(f.quality_ratings) < 2 "
+                    "AND AVG(f.overall_ratings) < 2";
+
+    auto result = dbManager.fetchData(query);
+    
+    std::string discarded_items;
+    for (auto row : result) {
+        discarded_items += row[0] + "\t";
+    }
+    return discarded_items;
 }

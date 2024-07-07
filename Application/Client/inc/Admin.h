@@ -14,6 +14,7 @@ private:
     void handleRemoveEmployee();
     void handleAddMenuItem();
     void handleRemoveMenuItem();
+    void viewDiscardedMenuItems();
 
     std::string getEmployeeDetails();
     std::string getMenuItemDetails();

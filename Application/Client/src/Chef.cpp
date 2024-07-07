@@ -51,8 +51,6 @@ void Chef::chefLandingPage() {
                 std::cout << "Invalid Option" << std::endl;
                 break;
         }
-        std::cout << "Press Enter to go back: ";
-        std::cin.ignore();
     } catch (const std::exception& e) {
         std::cerr << "An error occurred: " << e.what() << std::endl;
     } catch (...) {

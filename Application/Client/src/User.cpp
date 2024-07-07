@@ -21,7 +21,11 @@ bool User::isValidDate(const std::string& date) {
 
 void User::displayMenuItems(const std::vector<std::string>& menu_item_list, const std::string& date) {
     std::cout << "---------------------------" << std::endl;
-    std::cout << "Menu Items for " << date << ":" << std::endl;
+    if (!date.empty()) {
+        std::cout << "Menu Items for " << date << ":" << std::endl;
+    } else {
+        std::cout << "Menu Items:" << std::endl;
+    }
     std::cout << "---------------------------" << std::endl;
     for (size_t i = 0; i < menu_item_list.size(); ++i) {
         std::cout << std::setw(2) << i + 1 << ". " << menu_item_list[i] << std::endl;

@@ -13,12 +13,13 @@ enum class AdminOptions {
     REMOVE_MENU_ITEM,
     ADD_EMPLOYEE,
     REMOVE_EMPLOYEE,
+    VIEW_DISCARDED_MENU_ITEM,
     LOGOUT
 };
 
 void Admin::adminLandingPage() {
     try {
-        std::vector<std::string> options = {"Display Menu Items", "View Specific Date Menu", "Add Menu Item", "Remove Menu Item", "Add Employee", "Remove Employee", "Logout"};
+        std::vector<std::string> options = {"Display Menu Items", "View Specific Date Menu", "Add Menu Item", "Remove Menu Item", "Add Employee", "Remove Employee", "View Discarded Menu Item", "Logout"};
 
         std::cout << "Press enter to continue: ";
         std::cin.ignore();
@@ -42,6 +43,9 @@ void Admin::adminLandingPage() {
                 break;
             case AdminOptions::REMOVE_MENU_ITEM:
                 handleRemoveMenuItem();
+                break;
+            case AdminOptions::VIEW_DISCARDED_MENU_ITEM:
+                viewDiscardedMenuItems();
                 break;
             case AdminOptions::LOGOUT:
                 std::cout << "Logging out..." << std::endl;
@@ -122,7 +126,7 @@ void Admin::handleRemoveMenuItem() {
         remove_menu_item_status = Utils::splitStringbyTab(remove_menu_item_status)[1];
         if(remove_menu_item_status == "Menu item removed successfully") {
             std::cout << "Menu Item Removed Successfully" << std::endl;
-            updateNotificationToAll("Menu Item Removed");
+            updateNotificationToAll("Menu Item Removed: " + menu_item);
         } else {
             std::cout << "Error Removing Menu item: " << remove_menu_item_status << std::endl;
         }
@@ -254,4 +258,29 @@ bool Admin::getIsSweet() {
         }
     }
     return is_sweet;
+}
+
+void Admin::viewDiscardedMenuItems() {
+    try {
+        std::cout << "Viewing Discarded Menu Items..." << std::endl;
+        
+        clientSocket.sendMessage(static_cast<int>(RequestType::GET_DISCARDED_MENU_ITEMS), "");
+        std::string discarded_menu_items = clientSocket.receiveMessage();
+        discarded_menu_items = Utils::removeResponseType(discarded_menu_items);
+        auto discarded_menu_item_list = Utils::splitStringbyTab(discarded_menu_items);
+
+        std::cout << "Menu Items having avreage rating less than 2: \n";
+        displayMenuItems(discarded_menu_item_list, "");
+
+        std::cout << "Do you want to remove above item(s)?" << std::endl;
+        std::string response = getInput("Enter 'Y' to remove or any other key to cancel: ");
+        if (response == "Y" || response == "y") {
+            handleRemoveMenuItem();
+        }
+        
+    } catch (const std::exception& e) {
+        std::cerr << "An error occurred while viewing discarded menu items: " << e.what() << std::endl;
+    } catch (...) {
+        std::cerr << "An unknown error occurred while viewing discarded menu items" << std::endl;
+    }
 }
