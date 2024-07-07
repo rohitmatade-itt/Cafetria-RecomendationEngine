@@ -64,7 +64,11 @@ std::string ClientRequestManager::viewSpecificDateMenuRequest(std::string messag
     RollOutDBManager rolloutDBManager;
     std::string date = splitStringbyTab(message)[0];
     auto menu_list = rolloutDBManager.getRollOutByDate(date);
-    return menu_list.empty() ? "No menu available for the date" : menu_list[0];
+    std::string menu_list_str;
+    for (auto item : menu_list) {
+        menu_list_str += item + "\t";
+    }
+    return menu_list.empty() ? "No menu available for the date" : menu_list_str;
 }
 
 bool ClientRequestManager::addEmployeeRequest(std::string message) {
@@ -86,14 +90,6 @@ bool ClientRequestManager::removeMenuItemRequest(std::string message) {
     MenuDBManager menuDBManager;
     return menuDBManager.removeMenuItem(message);
 }
-
-// std::string ClientRequestManager::generateReportRequest(std::string message) {
-//     RollOutDBManager rolloutDBManager;
-//     std::string startdate = splitStringbyTab(message)[0];
-//     std::string enddate = splitStringbyTab(message)[1];
-
-//     return rolloutDBManager.generateReport(startdate, enddate);
-// }
 
 std::string ClientRequestManager::getRecommendedListRequest(std::string message) {
     RecommendationEngine engine("sentiment_words.txt");

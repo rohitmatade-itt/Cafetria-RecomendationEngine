@@ -6,7 +6,7 @@ DatabaseManager::DatabaseManager() {
         this->connect();
     } catch (sql::SQLException& e) {
         std::cerr << "Error connecting to MySQL: " << e.what() << std::endl;
-        throw; // Rethrow the exception to indicate failure to construct DatabaseManager
+        throw;
     }
 }
 
@@ -48,7 +48,6 @@ bool DatabaseManager::executeUpdate(const std::string& query) {
     }
 }
 
-// TODO: typedef std::vector<std::vector<std::string>> RecordData or something similar
 std::vector<std::vector<std::string>> DatabaseManager::fetchData(const std::string& query) {
     std::vector<std::vector<std::string>> data;
     try {

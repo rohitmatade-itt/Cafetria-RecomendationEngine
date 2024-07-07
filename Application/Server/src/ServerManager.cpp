@@ -125,11 +125,6 @@ std::string ServerManager::handleClientRequest(std::string message) {
             }
             break;
 
-        // case static_cast<int>(RequestType::GENERATE_REPORT_REQUEST):
-        //     report = clientRequestManager.generateReportRequest(request.message);
-        //     response = report;
-        //     break;
-
         case static_cast<int>(RequestType::GET_RECOMMENDATION):
             recomended_items = clientRequestManager.getRecommendedListRequest(request.message);
             response = recomended_items;

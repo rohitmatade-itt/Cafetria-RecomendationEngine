@@ -6,13 +6,11 @@
 
 class ClientSocket {
 public:
-    // Deleted copy constructor and assignment operator to prevent copying
     ClientSocket(const ClientSocket&) = delete;
     ClientSocket& operator=(const ClientSocket&) = delete;
 
-    // Public static method to access the singleton instance
     static ClientSocket& getInstance() {
-        static ClientSocket instance; // Guaranteed to be destroyed and instantiated on first use
+        static ClientSocket instance;
         return instance;
     }
 
@@ -20,8 +18,8 @@ public:
     std::string receiveMessage();
 
 private:
-    ClientSocket(); // Constructor is private
-    ~ClientSocket(); // Destructor can be private or public
+    ClientSocket();
+    ~ClientSocket();
 
     const char* ipAddress;
     int port;

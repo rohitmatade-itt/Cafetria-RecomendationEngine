@@ -21,15 +21,12 @@ bool User::isValidDate(const std::string& date) {
 
 void User::displayMenuItems(const std::vector<std::string>& menu_item_list, const std::string& date) {
     std::cout << "---------------------------" << std::endl;
-    if (!date.empty()) {
-        std::cout << "Menu Items for " << date << ":" << std::endl;
-    } else {
-        std::cout << "Menu Items:" << std::endl;
-    }
+    std::cout << "Menu Items for " << date << ":" << std::endl;
     std::cout << "---------------------------" << std::endl;
     for (size_t i = 0; i < menu_item_list.size(); ++i) {
         std::cout << std::setw(2) << i + 1 << ". " << menu_item_list[i] << std::endl;
     }
+    std::cout << "---------------------------" << std::endl;
 }
 
 std::string User::userLogin() {
@@ -101,6 +98,7 @@ void User::viewSpecificDateMenu() {
         auto menu_item_list = Utils::splitStringbyTab(menu_items);
 
         displayMenuItems(menu_item_list, date);
+        std::cin.ignore();
     } catch (const std::exception& e) {
         std::cerr << "An error occurred while viewing specific date menu: " << e.what() << std::endl;
     } catch (...) {

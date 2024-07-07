@@ -77,13 +77,13 @@ void Admin::handleAddEmployee() {
 
 void Admin::handleRemoveEmployee() {
     try {
-        std::string employee_id = getInput("Enter Employee ID: ");
+        std::string username = getInput("Enter Username: ");
         
-        clientSocket.sendMessage(static_cast<int>(RequestType::REMOVE_EMPLOYEE_REQUEST), employee_id);
+        clientSocket.sendMessage(static_cast<int>(RequestType::REMOVE_EMPLOYEE_REQUEST), username);
         std::string remove_employee_status = clientSocket.receiveMessage();
         remove_employee_status = Utils::splitStringbyTab(remove_employee_status)[1];
         if(remove_employee_status == "Employee removed successfully") {
-            std::cout << "Employee " << employee_id << " Removed Successfully" << std::endl;
+            std::cout << "Employee " << username << " Removed Successfully" << std::endl;
         } else {
             std::cout << "Error Removing Employee: " << remove_employee_status << std::endl;
         }
