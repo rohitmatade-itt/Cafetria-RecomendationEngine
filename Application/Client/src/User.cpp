@@ -158,13 +158,20 @@ void User::getNotificationIfAny(std::string username) {
 void User::viewFeedbackRatings() {
     try {
         displayMenu();
-        std::string item_name = getInput("Enter the item name for which you want to view feedback and ratings: ");
+        std::cout << "Enter the item name for which you want to view feedback and ratings: ";
+        std::string item_name;
+        getline(std::cin, item_name);
+
         clientSocket.sendMessage(static_cast<int>(RequestType::VIEW_FEEDBACK), item_name);
         std::string feedback = clientSocket.receiveMessage();
         feedback = Utils::removeResponseType(feedback);
 
         std::cout << "Feedback and Ratings for " << item_name << ":" << std::endl;
-        displayFeedback(feedback);
+        if(feedback.empty()) {
+            std::cout << "No feedback and ratings available for " << item_name << std::endl;
+        } else {
+            displayFeedback(feedback);
+        }
     } catch (const std::exception& e) {
         std::cerr << "An error occurred while viewing feedback and ratings: " << e.what() << std::endl;
     } catch (...) {
@@ -190,5 +197,4 @@ void User::displayFeedback(std::string feedback) {
     }
 
     std::cout << "+--------------+----------------+----------------+-------------------------------------------------------------------------+" << std::endl;
-    std::cin.ignore();
 }

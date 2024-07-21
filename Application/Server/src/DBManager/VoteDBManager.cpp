@@ -27,13 +27,17 @@ bool VoteDBManager::voteMenu(std::string message) {
 }
 
 std::string VoteDBManager::getVotes(std::string message) {
-    std::string query = "SELECT vm.item_id, m.item_name, rm.meal_type, COUNT(vm.item_id) "
+    std::string query = "SELECT vm.item_id, "
+                        "m.item_name, "
+                        "GROUP_CONCAT(DISTINCT rm.meal_type ORDER BY rm.meal_type SEPARATOR ', ') AS meal_types, "
+                        "COUNT(DISTINCT vm.vote_id) AS vote_count "
                         "FROM Vote vm "
                         "JOIN Menu m ON vm.item_id = m.item_id "
-                        "JOIN RolloutMenu rm ON m.item_id = rm.item_id "
+                        "JOIN RolloutMenu rm ON vm.item_id = rm.item_id "
                         "WHERE vm.date = DATE_ADD(CURRENT_DATE, INTERVAL 1 DAY) "
-                        "GROUP BY vm.item_id, m.item_name, rm.meal_type";
-    
+                        "AND rm.rollout_date = DATE_ADD(CURRENT_DATE, INTERVAL 1 DAY) "
+                        "GROUP BY vm.item_id, m.item_name;";
+
     auto result = dbManager.fetchData(query);
 
     std::string tabSeparatedString;
@@ -56,10 +60,12 @@ std::string VoteDBManager::getUserVoteList(std::string message) {
         elements.push_back(element);
     }
 
-    std::string query = "SELECT item_id, item_name, date "
+    std::string query = "SELECT v.vote_id, v.item_id, m.item_name, v.date "
                         "FROM Vote v "
                         "JOIN Menu m ON v.item_id = m.item_id "
                         "WHERE user_name = '" + elements[0] + "'";
+
+    std::cout << query << std::endl;
     
     auto result = dbManager.fetchData(query);
 

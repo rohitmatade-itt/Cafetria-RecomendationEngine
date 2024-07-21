@@ -123,7 +123,9 @@ void Admin::handleAddMenuItem() {
 
 void Admin::handleRemoveMenuItem() {
     try {
-        std::string menu_item = getInput("Enter the item name to remove: ");
+        std::string menu_item;
+        std::cout << "Enter Menu Item Name: ";
+        getline(std::cin, menu_item);
         
         clientSocket.sendMessage(static_cast<int>(RequestType::REMOVE_MENU_ITEM_REQUEST), menu_item);
         std::string remove_menu_item_status = clientSocket.receiveMessage();
@@ -154,7 +156,9 @@ std::string Admin::getEmployeeDetails() {
 }
 
 std::string Admin::getMenuItemDetails() {
-    std::string item_name = getInput("Item Name: ");
+    std::string item_name;
+    std::cout << "Enter Item Name: ";
+    getline(std::cin, item_name);
     double cost_price = getCostPrice();
     double selling_price = getSellingPrice();
     bool availability_status = getAvailabilityStatus();

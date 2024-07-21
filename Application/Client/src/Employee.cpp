@@ -206,10 +206,10 @@ void Employee::giveFeedback() {
 
         getUserVoteList();
         
-        std::string item_id;
+        std::string vote_id;
         while (true) {
-            item_id = getVoteId();
-            if (item_id == "0") {
+            vote_id = getVoteId();
+            if (vote_id == "0") {
                 break;
             }
 
@@ -218,7 +218,7 @@ void Employee::giveFeedback() {
             std::string overall_ratings = getRatings("overall");
             std::string comment = getComment();
 
-            clientSocket.sendMessage(static_cast<int>(RequestType::GIVE_FEEDBACK), item_id + "\t" + logged_username + "\t" + taste_ratings + "\t" + quality_ratings + "\t" + overall_ratings + "\t" + comment);
+            clientSocket.sendMessage(static_cast<int>(RequestType::GIVE_FEEDBACK), vote_id + "\t" + logged_username + "\t" + taste_ratings + "\t" + quality_ratings + "\t" + overall_ratings + "\t" + comment);
             std::string response = clientSocket.receiveMessage();
             response = Utils::removeResponseType(response);
             std::cout << response << std::endl;
@@ -231,7 +231,7 @@ void Employee::giveFeedback() {
 }
 
 std::string Employee::getVoteId() {
-    return getInput("Enter the item ID for which you want to give feedback (0 to stop): ");
+    return getInput("Enter the vote ID for which you want to give feedback (0 to stop): ");
 }
 
 std::string Employee::getRatings(const std::string& ratingType) {
@@ -304,19 +304,21 @@ void Employee::getUserVoteList() {
         std::cout << "User Vote List" << std::endl;
         auto menu_items = Utils::splitStringbyNewline(user_vote_list);
 
-        std::cout << "+----------+----------------+-------------+" << std::endl;
-        std::cout << "| Item ID  | Item Name      | Date        |" << std::endl;
-        std::cout << "+----------+----------------+-------------+" << std::endl;
+        std::cout << "+----------+----------+------------------+-------------+" << std::endl;
+        std::cout << "| Vote ID  | Item ID  | Item Name        | Date        |" << std::endl;
+        std::cout << "+----------+----------+------------------+-------------+" << std::endl;
 
         for(auto menu_item : menu_items) {
             std::vector<std::string> item_details = Utils::splitStringbyTab(menu_item);
             if(item_details.size() >= 3) {
                 std::cout << "| " << std::setw(8) << item_details[0] << " | " 
-                        << std::setw(14) << item_details[1] << " | " 
-                        << std::setw(11) << item_details[2] << " |" << std::endl;
+                        << std::setw(8) << item_details[1] << " | " 
+                        << std::setw(14) << item_details[2] << " |" 
+                        << std::setw(11) << item_details[3] << " |"
+                        << std::endl;
             }
         }
-        std::cout << "+----------+----------------+-------------+" << std::endl;
+        std::cout << "+----------+----------+------------------+-------------+" << std::endl;
     } catch (const std::exception& e) {
         std::cerr << "An error occurred while getting user vote list: " << e.what() << std::endl;
     } catch (...) {
