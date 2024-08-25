@@ -16,8 +16,8 @@ private:
     
 public:
     Chef(std::string username);
-    void chefLandingPage();
-    void handleRolloutNextDayMenu();
+    void displayChefLandingPage();
+    void RolloutNextDayMenu();
     void viewNextDayVotes();
 };
 

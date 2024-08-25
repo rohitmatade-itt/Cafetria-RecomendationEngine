@@ -20,7 +20,7 @@ enum class EmployeeOptions {
 Employee::Employee(std::string username) : logged_username(username) {
 }
 
-void Employee::employeeLandingPage() {
+void Employee::displayEmployeeLandingPage() {
     try {
         std::vector<std::string> options = {"Display Menu Items", "View Specific Date Menu", "Update Profile", "View My Profile Details", "Give Vote", "Give Feedback", "Logout"};
 

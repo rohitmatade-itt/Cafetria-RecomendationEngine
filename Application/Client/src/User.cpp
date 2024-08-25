@@ -4,7 +4,6 @@
 
 #include "User.h"
 #include "ClientSocket.h"
-#include "SocketProtocol.h"
 #include "RequestType.h"
 #include "Utils.h"
 

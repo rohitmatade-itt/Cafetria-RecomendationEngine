@@ -12,6 +12,11 @@
 #include <cppconn/statement.h>
 #include <cppconn/prepared_statement.h>
 
+#define HOST "127.0.0.1"
+#define USER "rohitmatade"
+#define PASSWORD "Code#ub$7"
+#define DATABASE "cafeteria"
+
 struct Feedback {
     int item_id;
     int taste_ratings;
@@ -36,8 +41,8 @@ std::vector<Feedback> fetchFeedback(const std::string& startDate, const std::str
     std::vector<Feedback> feedbacks;
     try {
         sql::Driver *driver = get_driver_instance();
-        std::unique_ptr<sql::Connection> con(driver->connect("tcp://127.0.0.1:3306", "rohitmatade", "Code#ub$7"));
-        con->setSchema("cafeteria");
+        std::unique_ptr<sql::Connection> con(driver->connect(HOST, USER, PASSWORD));
+        con->setSchema(DATABASE);
 
         std::unique_ptr<sql::PreparedStatement> pstmt(con->prepareStatement(
             "SELECT item_id, taste_ratings, quality_ratings, overall_ratings, date FROM Feedback WHERE date BETWEEN ? AND ?"));
@@ -68,8 +73,8 @@ std::vector<Vote> fetchVotesFromDB(const std::string& startDate, const std::stri
     std::vector<Vote> votes;
     try {
         sql::Driver *driver = get_driver_instance();
-        std::unique_ptr<sql::Connection> con(driver->connect("tcp://127.0.0.1:3306", "rohitmatade", "Code#ub$7"));
-        con->setSchema("cafeteria");
+        std::unique_ptr<sql::Connection> con(driver->connect(HOST, USER, PASSWORD));
+        con->setSchema(DATABASE);
 
         std::unique_ptr<sql::PreparedStatement> pstmt(con->prepareStatement(
             "SELECT item_id, date FROM Vote WHERE date BETWEEN ? AND ?"));
@@ -97,8 +102,8 @@ std::vector<MenuItem> fetchMenuItems() {
     std::vector<MenuItem> menuItems;
     try {
         sql::Driver *driver = get_driver_instance();
-        std::unique_ptr<sql::Connection> con(driver->connect("tcp://127.0.0.1:3306", "rohitmatade", "Code#ub$7"));
-        con->setSchema("cafeteria");
+        std::unique_ptr<sql::Connection> con(driver->connect(HOST, USER, PASSWORD));
+        con->setSchema(DATABASE);
 
         std::unique_ptr<sql::Statement> stmt(con->createStatement());
         std::unique_ptr<sql::ResultSet> res(stmt->executeQuery("SELECT item_id, item_name, cost_price, selling_price FROM Menu"));

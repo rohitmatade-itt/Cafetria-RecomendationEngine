@@ -18,7 +18,7 @@ enum class AdminOptions {
     LOGOUT
 };
 
-void Admin::adminLandingPage() {
+void Admin::displayAdminLandingPage() {
     try {
         std::vector<std::string> options = {"Display Menu Items", "View Specific Date Menu", "View Feedback & Ratings", "Add Menu Item", "Remove Menu Item", "Add Employee", "Remove Employee", "View Discarded Menu Item", "Logout"};
 
@@ -37,16 +37,16 @@ void Admin::adminLandingPage() {
                 viewFeedbackRatings();
                 break;
             case AdminOptions::ADD_EMPLOYEE:
-                handleAddEmployee();
+                addEmployee();
                 break;
             case AdminOptions::REMOVE_EMPLOYEE:
-                handleRemoveEmployee();
+                removeEmployee();
                 break;
             case AdminOptions::ADD_MENU_ITEM:
-                handleAddMenuItem();
+                addMenuItem();
                 break;
             case AdminOptions::REMOVE_MENU_ITEM:
-                handleRemoveMenuItem();
+                removeMenuItem();
                 break;
             case AdminOptions::VIEW_DISCARDED_MENU_ITEM:
                 viewDiscardedMenuItems();
@@ -65,7 +65,7 @@ void Admin::adminLandingPage() {
     }
 }
 
-void Admin::handleAddEmployee() {
+void Admin::addEmployee() {
     try {
         std::string employeeDetails = getEmployeeDetails();
         clientSocket.sendMessage(static_cast<int>(RequestType::ADD_EMPLOYEE_REQUEST), employeeDetails);
@@ -83,7 +83,7 @@ void Admin::handleAddEmployee() {
     }
 }
 
-void Admin::handleRemoveEmployee() {
+void Admin::removeEmployee() {
     try {
         std::string username = getInput("Enter Username: ");
         
@@ -102,7 +102,7 @@ void Admin::handleRemoveEmployee() {
     }
 }
 
-void Admin::handleAddMenuItem() {
+void Admin::addMenuItem() {
     try {
         std::string menuItemDetails = getMenuItemDetails();
         clientSocket.sendMessage(static_cast<int>(RequestType::ADD_MENU_ITEM_REQUEST), menuItemDetails);
@@ -121,7 +121,7 @@ void Admin::handleAddMenuItem() {
     }
 }
 
-void Admin::handleRemoveMenuItem() {
+void Admin::removeMenuItem() {
     try {
         std::string menu_item;
         std::cout << "Enter Menu Item Name: ";
@@ -283,7 +283,7 @@ void Admin::viewDiscardedMenuItems() {
         std::cout << "Do you want to remove above item(s)?" << std::endl;
         std::string response = getInput("Enter 'Y' to remove or any other key to cancel: ");
         if (response == "Y" || response == "y") {
-            handleRemoveMenuItem();
+            removeMenuItem();
         }
         
     } catch (const std::exception& e) {

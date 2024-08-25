@@ -42,7 +42,6 @@ void ClientSocket::sendMessage(const int& requestType, const std::string& messag
     std::string fullMessage = std::to_string(requestType) + "\t" + message;
     if (send(clientSocket, fullMessage.c_str(), fullMessage.size(), 0) < 0) {
         std::cerr << "Send failed" << std::endl;
-    } else {
     }
 }
 

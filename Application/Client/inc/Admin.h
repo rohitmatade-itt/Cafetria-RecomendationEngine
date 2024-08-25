@@ -2,23 +2,22 @@
 #define ADMIN_H
 
 #include <string>
-
 #include "User.h"
 
 class Admin : public User {
 public:
-    void adminLandingPage();
+    void displayAdminLandingPage();
 
 private:
-    void handleAddEmployee();
-    void handleRemoveEmployee();
-    void handleAddMenuItem();
-    void handleRemoveMenuItem();
-    void viewDiscardedMenuItems();
-
+    void addEmployee();
+    void removeEmployee();
     std::string getEmployeeDetails();
+
+    void addMenuItem();
+    void removeMenuItem();
+    void viewDiscardedMenuItems();
     std::string getMenuItemDetails();
-    
+
     std::string getItemName();
     double getCostPrice();
     double getSellingPrice();

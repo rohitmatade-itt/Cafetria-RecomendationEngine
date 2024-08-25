@@ -33,7 +33,7 @@ void launchEmployeeSession(const std::string& user_name) {
     Employee employee(user_name);
     employee.getNotificationIfAny(user_name);
     while (true) {
-        employee.employeeLandingPage();
+        employee.displayEmployeeLandingPage();
     }
 }
 
@@ -41,14 +41,14 @@ void launchChefSession(const std::string& user_name) {
     Chef chef(user_name);
     chef.getNotificationIfAny(user_name);
     while (true) {
-        chef.chefLandingPage();
+        chef.displayChefLandingPage();
     }
 }
 
 void launchAdminSession() {
     Admin admin;
     while (true) {
-        admin.adminLandingPage();
+        admin.displayAdminLandingPage();
     }
 }
 

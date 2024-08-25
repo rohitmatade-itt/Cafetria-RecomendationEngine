@@ -18,7 +18,7 @@ private:
 
 public:
     Employee(std::string username);
-    void employeeLandingPage();
+    void displayEmployeeLandingPage();
     void updateProfile();
     void getUserProfileDetails();
     void giveVote();

@@ -4,7 +4,6 @@
 #include "ServerManager.h"
 #include "UserDTO.h"
 #include "UserDBManager.h"
-#include "ClientRequestManager.h"
 #include "RequestType.h"
 #include "ResponseType.h"
 
@@ -21,29 +20,29 @@ void ServerManager::acceptConnection() {
 }
 
 bool ServerManager::start() {
+    bool success = true;
     std::string message = serverSocket->receiveMessage();
+
     if (message.empty()) {
         std::cerr << "Empty message received. Closing connection." << std::endl;
-        return false;
+        success = false;
+    } else {
+        std::string response = handleClientRequest(message);
+        serverSocket->sendMessage(static_cast<int>(ResponseType::SERVER_RESPONSE), response);
     }
-    std::string response = handleClientRequest(message);
-    serverSocket->sendMessage(static_cast<int>(ResponseType::SERVER_RESPONSE), response);
-    return true;
-}
 
+    return success;
+}
 
 SocketRequest ServerManager::parseSocketRequest(std::string input) {
     std::istringstream iss(input);
     std::string requestTypeStr;
-    std::getline(iss, requestTypeStr, '\t');
 
-    int requestType;
-    try {
-        requestType = std::stoi(requestTypeStr);
-    } catch (const std::invalid_argument& e) {
-        std::cerr << "Invalid request type: " << requestTypeStr << std::endl;
-        throw;
+    if (!std::getline(iss, requestTypeStr, '\t')) {
+        throw std::invalid_argument("Failed to parse request type");
     }
+
+    int requestType = std::stoi(requestTypeStr);
 
     std::string actualMessage;
     std::getline(iss, actualMessage);
@@ -52,193 +51,216 @@ SocketRequest ServerManager::parseSocketRequest(std::string input) {
 }
 
 std::string ServerManager::handleClientRequest(std::string message) {
-
-    std::string response = "";
-
     SocketRequest request = parseSocketRequest(message);
-
-    ClientRequestManager clientRequestManager;
-    std::string user, full_name, menu_list, user_details, report, recomended_items, rollout_status, rollout_list, votes_list, notification;
+    std::string response;
 
     switch (static_cast<int>(request.requestType)) {
         case static_cast<int>(RequestType::LOGIN_REQUEST):
-            user = clientRequestManager.loginRequest(request.message);
-            response = user;
+            response = handleLoginRequest(request.message);
             break;
 
         case static_cast<int>(RequestType::GET_FULL_NAME):
-            full_name = clientRequestManager.getFullNameRequest(request.message);
-            response = full_name;
+            response = handleGetFullNameRequest(request.message);
             break;
 
         case static_cast<int>(RequestType::DISPLAY_MENU_REQUEST):
-            menu_list = clientRequestManager.displayMenuRequest(request.message);
-            response = menu_list;
+            response = handleDisplayMenuRequest(request.message);
             break;
 
         case static_cast<int>(RequestType::VIEW_SPECIFIC_DATE_MENU_REQUEST):
-            menu_list = clientRequestManager.viewSpecificDateMenuRequest(request.message);
-            response = menu_list;
+            response = handleViewSpecificDateMenuRequest(request.message);
             break;
 
         case static_cast<int>(RequestType::ADD_EMPLOYEE_REQUEST):
-            if(clientRequestManager.addEmployeeRequest(request.message))
-            {
-                response = "Employee added successfully";
-            }
-            else
-            {
-                response = "Employee not added";
-            }
+            response = handleAddEmployeeRequest(request.message);
             break;
 
         case static_cast<int>(RequestType::REMOVE_EMPLOYEE_REQUEST):
-            if(clientRequestManager.removeEmployeeRequest(request.message))
-            {
-                response = "Employee removed successfully";
-            }
-            else
-            {
-                response = "Employee not removed";
-            }
+            response = handleRemoveEmployeeRequest(request.message);
             break;
 
         case static_cast<int>(RequestType::ADD_MENU_ITEM_REQUEST):
-            if(clientRequestManager.addMenuItemRequest(request.message))
-            {
-                response = "Menu item added successfully";
-            }
-            else
-            {
-                response = "Menu item not added";
-            }
+            response = handleAddMenuItemRequest(request.message);
             break;
 
         case static_cast<int>(RequestType::REMOVE_MENU_ITEM_REQUEST):
-            if(clientRequestManager.removeMenuItemRequest(request.message))
-            {
-                response = "Menu item removed successfully";
-            }
-            else
-            {
-                response = "Menu item not removed";
-            }
+            response = handleRemoveMenuItemRequest(request.message);
             break;
 
         case static_cast<int>(RequestType::GET_RECOMMENDATION):
-            recomended_items = clientRequestManager.getRecommendedListRequest(request.message);
-            response = recomended_items;
+            response = handleGetRecommendationRequest(request.message);
             break;
 
         case static_cast<int>(RequestType::ROLLOUT_NEXT_DAY_MENU):
-            if(clientRequestManager.rolloutNextDayMenuRequest(request.message))
-            {
-                response = "Menu item added successfully to the next day menu";
-            }
-            else
-            {
-                response = "Menu item not added to the next day menu";
-            }
+            response = handleRolloutNextDayMenuRequest(request.message);
             break;
 
         case static_cast<int>(RequestType::GET_NEXT_DAY_MENU_REQUEST):
-            rollout_list = clientRequestManager.getNextDayMenuRequest(request.message);
-            response = rollout_list;
+            response = handleGetNextDayMenuRequest(request.message);
             break;
 
         case static_cast<int>(RequestType::VOTE_NEXT_DAY_MENU):
-            if(clientRequestManager.voteNextDayMenuRequest(request.message))
-            {
-                response = "Vote added successfully";
-            }
-            else
-            {
-                response = "Vote not added";
-            }
+            response = handleVoteNextDayMenuRequest(request.message);
             break;
 
         case static_cast<int>(RequestType::GIVE_FEEDBACK):
-            if(clientRequestManager.giveFeedbackRequest(request.message))
-            {
-                response = "Feedback added successfully";
-            }
-            else
-            {
-                response = "Feedback not added";
-            }
+            response = handleGiveFeedbackRequest(request.message);
             break;
 
         case static_cast<int>(RequestType::VIEW_NEXT_DAY_VOTES):
-            votes_list = clientRequestManager.viewNextDayVotesRequest(request.message);
-            response = votes_list;
+            response = handleViewNextDayVotesRequest(request.message);
             break;
 
         case static_cast<int>(RequestType::GET_USER_VOTE_LIST):
-            votes_list = clientRequestManager.getUserVoteListRequest(request.message);
-            response = votes_list;
+            response = handleGetUserVoteListRequest(request.message);
             break;
 
         case static_cast<int>(RequestType::GET_USER_PROFILE):
-            user_details = clientRequestManager.getUserProfileRequest(request.message);
-            response = user_details;
+            response = handleGetUserProfileRequest(request.message);
             break;
 
         case static_cast<int>(RequestType::UPDATE_USER_PROFILE):
-            if(clientRequestManager.updateUserProfileRequest(request.message))
-            {
-                response = "User profile updated successfully";
-            }
-            else
-            {
-                response = "User profile not updated";
-            }
+            response = handleUpdateUserProfileRequest(request.message);
             break;
-        
+
         case static_cast<int>(RequestType::GET_USER_RECOMMENDED_LIST):
-            recomended_items = clientRequestManager.getUserRecommendedListRequest(request.message);
-            response = recomended_items;
+            response = handleGetUserRecommendedListRequest(request.message);
             break;
 
         case static_cast<int>(RequestType::UPDATE_NOTIFICATION_ALL):
-            if(clientRequestManager.updateNotificationRequest(request.message))
-            {
-                response = "Notification updated successfully";
-            }
-            else
-            {
-                response = "Notification not updated";
-            }
+            response = handleUpdateNotificationRequest(request.message);
             break;
 
         case static_cast<int>(RequestType::UPDATE_NOTIFICATION_EMPLOYEE):
-            if(clientRequestManager.updateNotificationEmployeesRequest(request.message))
-            {
-                response = "Notification updated successfully";
-            }
-            else
-            {
-                response = "Notification not updated";
-            }
+            response = handleUpdateNotificationEmployeesRequest(request.message);
             break;
 
         case static_cast<int>(RequestType::GET_NOTIFICATION):
-            notification = clientRequestManager.getNotificationRequest(request.message);
-            response = notification;
+            response = handleGetNotificationRequest(request.message);
             break;
 
         case static_cast<int>(RequestType::GET_DISCARDED_MENU_ITEMS):
-            menu_list = clientRequestManager.getDiscardedMenuItemsRequest();
-            response = menu_list;
+            response = handleGetDiscardedMenuItemsRequest();
             break;
 
         case static_cast<int>(RequestType::VIEW_FEEDBACK):
-            report = clientRequestManager.viewFeedbackAndRatingsRequest(request.message);
-            response = report;
+            response = handleViewFeedbackRequest(request.message);
             break;
             
         default:
             std::cerr << "Invalid request type: " << request.requestType << std::endl;
+            response = "";
             break;
     }
     return response;
+}
+
+std::string ServerManager::handleLoginRequest(std::string message) {
+    std::string result = clientRequestManager.loginRequest(message);
+    return result;
+}
+
+std::string ServerManager::handleGetFullNameRequest(std::string message) {
+    std::string result = clientRequestManager.getFullNameRequest(message);
+    return result;
+}
+
+std::string ServerManager::handleDisplayMenuRequest(std::string message) {
+    std::string result = clientRequestManager.displayMenuRequest(message);
+    return result;
+}
+
+std::string ServerManager::handleViewSpecificDateMenuRequest(std::string message) {
+    std::string result = clientRequestManager.viewSpecificDateMenuRequest(message);
+    return result;
+}
+
+std::string ServerManager::handleAddEmployeeRequest(std::string message) {
+    std::string result = clientRequestManager.addEmployeeRequest(message) ? "Employee added successfully" : "Employee not added";
+    return result;
+}
+
+std::string ServerManager::handleRemoveEmployeeRequest(std::string message) {
+    std::string result = clientRequestManager.removeEmployeeRequest(message) ? "Employee removed successfully" : "Employee not removed";
+    return result;
+}
+
+std::string ServerManager::handleAddMenuItemRequest(std::string message) {
+    std::string result = clientRequestManager.addMenuItemRequest(message) ? "Menu item added successfully" : "Menu item not added";
+    return result;
+}
+
+std::string ServerManager::handleRemoveMenuItemRequest(std::string message) {
+    std::string result = clientRequestManager.removeMenuItemRequest(message) ? "Menu item removed successfully" : "Menu item not removed";
+    return result;
+}
+
+std::string ServerManager::handleGetRecommendationRequest(std::string message) {
+    std::string result = clientRequestManager.getRecommendedListRequest(message);
+    return result;
+}
+
+std::string ServerManager::handleRolloutNextDayMenuRequest(std::string message) {
+    std::string result = clientRequestManager.rolloutNextDayMenuRequest(message) ? "Menu item added successfully to the next day menu" : "Menu item not added to the next day menu";
+    return result;
+}
+
+std::string ServerManager::handleGetNextDayMenuRequest(std::string message) {
+    std::string result = clientRequestManager.getNextDayMenuRequest(message);
+    return result;
+}
+
+std::string ServerManager::handleVoteNextDayMenuRequest(std::string message) {
+    std::string result = clientRequestManager.voteNextDayMenuRequest(message) ? "Vote added successfully" : "Vote not added";
+    return result;
+}
+
+std::string ServerManager::handleGiveFeedbackRequest(std::string message) {
+    std::string result = clientRequestManager.giveFeedbackRequest(message) ? "Feedback added successfully" : "Feedback not added";
+    return result;
+}
+
+std::string ServerManager::handleViewNextDayVotesRequest(std::string message) {
+    std::string result = clientRequestManager.viewNextDayVotesRequest(message);
+    return result;
+}
+
+std::string ServerManager::handleGetUserVoteListRequest(std::string message) {
+    std::string result = clientRequestManager.getUserVoteListRequest(message);
+    return result;
+}
+
+std::string ServerManager::handleGetUserProfileRequest(std::string message) {
+    std::string result = clientRequestManager.getUserProfileRequest(message);
+    return result;
+}
+
+std::string ServerManager::handleUpdateUserProfileRequest(std::string message) {
+    std::string result = clientRequestManager.updateUserProfileRequest(message) ? "User profile updated successfully" : "User profile not updated";
+    return result;
+}
+
+std::string ServerManager::handleUpdateNotificationRequest(std::string message) {
+    std::string result = clientRequestManager.updateNotificationRequest(message) ? "Notifications updated successfully" : "Notifications not updated";  // Corrected here
+    return result;
+}
+
+std::string ServerManager::handleUpdateNotificationEmployeesRequest(std::string message) {
+    std::string result = clientRequestManager.updateNotificationEmployeesRequest(message) ? "Employee notifications updated successfully" : "Employee notifications not updated";
+    return result;
+}
+
+std::string ServerManager::handleGetNotificationRequest(std::string message) {
+    std::string result = clientRequestManager.getNotificationRequest(message);
+    return result;
+}
+
+std::string ServerManager::handleGetDiscardedMenuItemsRequest() {
+    std::string result = clientRequestManager.getDiscardedMenuItemsRequest();
+    return result;
+}
+
+std::string ServerManager::handleViewFeedbackRequest(std::string message) {
+    std::string result = clientRequestManager.viewFeedbackAndRatingsRequest(message) ? "Feedback added successfully" : "Feedback not added";
+    return result;
 }
