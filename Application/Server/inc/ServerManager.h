@@ -13,35 +13,36 @@ public:
     void acceptConnection();
 
 private:
-    ClientRequestManager clientRequestManager;
     SocketRequest parseSocketRequest(std::string input);
     std::string handleClientRequest(std::string message);
 
-    std::string handleLoginRequest(std::string message);
-    std::string handleGetFullNameRequest(std::string message);
-    std::string handleDisplayMenuRequest(std::string message);
-    std::string handleViewSpecificDateMenuRequest(std::string message);
-    std::string handleAddEmployeeRequest(std::string message);
-    std::string handleRemoveEmployeeRequest(std::string message);
-    std::string handleAddMenuItemRequest(std::string message);
-    std::string handleRemoveMenuItemRequest(std::string message);
-    std::string handleGetRecommendationRequest(std::string message);
-    std::string handleRolloutNextDayMenuRequest(std::string message);
-    std::string handleGetNextDayMenuRequest(std::string message);
-    std::string handleVoteNextDayMenuRequest(std::string message);
-    std::string handleGiveFeedbackRequest(std::string message);
-    std::string handleViewNextDayVotesRequest(std::string message);
-    std::string handleGetUserVoteListRequest(std::string message);
-    std::string handleGetUserProfileRequest(std::string message);
-    std::string handleUpdateUserProfileRequest(std::string message);
-    std::string handleUpdateNotificationRequest(std::string message);
-    std::string handleUpdateNotificationEmployeesRequest(std::string message);
-    std::string handleGetNotificationRequest(std::string message);
-    std::string handleGetDiscardedMenuItemsRequest();
-    std::string handleViewFeedbackRequest(std::string message);
+    std::string loginRequest(std::string message);
+    std::string getFullNameRequest(std::string message);
+    std::string displayMenuRequest(std::string message);
+    std::string viewSpecificDateMenuRequest(std::string message);
+    std::string addEmployeeRequest(std::string message);
+    std::string removeEmployeeRequest(std::string message);
+    std::string addMenuItemRequest(std::string message);
+    std::string removeMenuItemRequest(std::string message);
+    std::string getRecommendationRequest(std::string message);
+    std::string getUserRecommendedListRequest(std::string message);
+    std::string rolloutNextDayMenuRequest(std::string message);
+    std::string getNextDayMenuRequest(std::string message);
+    std::string voteNextDayMenuRequest(std::string message);
+    std::string giveFeedbackRequest(std::string message);
+    std::string viewNextDayVotesRequest(std::string message);
+    std::string getUserVoteListRequest(std::string message);
+    std::string getUserProfileRequest(std::string message);
+    std::string updateUserProfileRequest(std::string message);
+    std::string updateNotificationRequest(std::string message);
+    std::string updateNotificationEmployeesRequest(std::string message);
+    std::string getNotificationRequest(std::string message);
+    std::string getDiscardedMenuItemsRequest();
+    std::string viewFeedbackRequest(std::string message);
 
     int port;
     ServerSocket* serverSocket;
+    ClientRequestManager clientRequestManager;
 };
 
 #endif // SERVERMANAGER_H

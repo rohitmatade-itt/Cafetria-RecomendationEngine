@@ -7,13 +7,6 @@
 #include "RequestType.h"
 #include "Utils.h"
 
-std::string User::getInput(const std::string& prompt) {
-    std::string input;
-    std::cout << prompt;
-    std::cin >> input;
-    return input;
-}
-
 bool User::isValidDate(const std::string& date) {
     std::regex date_format("\\d{4}-\\d{2}-\\d{2}");
     return std::regex_match(date, date_format);
@@ -196,4 +189,58 @@ void User::displayFeedback(std::string feedback) {
     }
 
     std::cout << "+--------------+----------------+----------------+-------------------------------------------------------------------------+" << std::endl;
+}
+
+std::string User::getInput(std::string prompt) {
+    std::cout << prompt;
+    std::string input;
+    std::getline(std::cin, input);
+    return input;
+}
+
+double User::getPrice(std::string prompt) {
+    double value;
+    while (true) {
+        std::cout << prompt;
+        if (std::cin >> value) break;
+        else {
+            std::cerr << "Invalid input. Please enter a number.\n";
+            std::cin.clear();
+            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+        }
+    }
+    return value;
+}
+
+bool User::getBoolean(std::string prompt) {
+    std::string input;
+    while (true) {
+        std::cout << prompt;
+        std::getline(std::cin, input);
+        if (input == "yes" || input == "no") return input == "yes";
+        else {
+            std::cerr << "Invalid input. Please enter 'yes' or 'no'.\n";
+        }
+    }
+}
+
+int User::getInteger(std::string prompt, std::vector<int> valid_values) {
+    int value;
+    while (true) {
+        std::cout << prompt;
+        if (std::cin >> value) {
+            if (std::find(valid_values.begin(), valid_values.end(), value) != valid_values.end()) break;
+            else std::cerr << "Invalid value. Please enter a valid number.\n";
+        } else {
+            std::cerr << "Invalid input. Please enter a number.\n";
+        }
+        std::cin.clear();
+        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+    }
+    return value;
+}
+
+void User::logout() {
+    std::cout << "Logging out..." << std::endl;
+    exit(0);
 }

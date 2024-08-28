@@ -9,6 +9,9 @@ public:
     ClientSocket(const ClientSocket&) = delete;
     ClientSocket& operator=(const ClientSocket&) = delete;
 
+    ClientSocket();
+    ~ClientSocket();
+
     static ClientSocket& getInstance() {
         static ClientSocket instance;
         return instance;
@@ -18,9 +21,6 @@ public:
     std::string receiveMessage();
 
 private:
-    ClientSocket();
-    ~ClientSocket();
-
     const char* ipAddress;
     int port;
     int clientSocket;

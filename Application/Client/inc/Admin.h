@@ -2,30 +2,35 @@
 #define ADMIN_H
 
 #include <string>
+#include <vector>
+#include "ClientSocket.h"
 #include "User.h"
+#include "RequestType.h"
 
-class Admin : public User {
+class Admin: public User {
 public:
     void displayAdminLandingPage();
 
 private:
-    void addEmployee();
-    void removeEmployee();
-    std::string getEmployeeDetails();
+    std::string logged_username;
+    ClientSocket clientSocket;
+
+    int selectLandingPageOption();
+    void landingPageOption(int option);
 
     void addMenuItem();
     void removeMenuItem();
+    void addEmployee();
+    void removeEmployee();
     void viewDiscardedMenuItems();
-    std::string getMenuItemDetails();
 
-    std::string getItemName();
-    double getCostPrice();
-    double getSellingPrice();
-    bool getAvailabilityStatus();
-    int getFoodType();
-    int getSpiceLevel();
-    int getCuisineType();
-    bool getIsSweet();
+    std::string gatherEmployeeDetails();
+    std::string sendEmployeeRequest(RequestType requestType, const std::string& details);
+    void processEmployeeResponse(const std::string& response, const std::string& action);
+
+    std::string gatherMenuItemDetails();
+    std::string sendMenuItemRequest(RequestType requestType, const std::string& details);
+    void processMenuItemResponse(const std::string& response, const std::string& action);
 };
 
 #endif // ADMIN_H

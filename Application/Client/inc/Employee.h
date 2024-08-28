@@ -1,31 +1,50 @@
 #ifndef EMPLOYEE_H
 #define EMPLOYEE_H
 
-#include "User.h"
 #include <string>
+#include <vector>
 
-class Employee : public User {
+#include "User.h"
+#include "ClientSocket.h"
+
+class Employee: public User {
+public:
+    Employee(std::string username);
+
+    void displayEmployeeLandingPage();
+    void displayUserProfileDetails();
+    void updateProfile();
+    void giveVote();
+    void giveFeedback();
+
 private:
-    std::string logged_username;
+    int selectLandingPageOption();
+    void landingPageOption(int option);
+
+    std::string requestUserProfile();
+    void displayFormattedProfile(const std::string& user_profile);
+    std::string getUpdatedProfileDetails();
+    void sendProfileUpdateRequest(const std::string& updatedProfile);
 
     int getDietPreference();
     int getSpiceLevel();
     int getPreferredCuisine();
     int getSweetPreference();
-    std::string getVoteId();
-    std::string getRatings(const std::string& ratingType);
-    std::string getComment();
+    int getInput(const std::string& prompt, int min, int max);
 
-public:
-    Employee(std::string username);
-    void displayEmployeeLandingPage();
-    void updateProfile();
-    void getUserProfileDetails();
-    void giveVote();
-    void giveFeedback();
-    void getNextDayMenu();
-    void getUserVoteList();
-    void getRecommendationToUser();
+    void displayNextDayMenu();
+    std::string requestNextDayMenu();
+    void displayFormattedMenu(const std::string& menu);
+
+    void displayRecommendations();
+    std::string requestRecommendations();
+    void sendVote(const std::string& item_id);
+
+    std::string getFeedbackFromUser();
+    void sendFeedback(const std::string& feedback);
+
+    std::string logged_username;
+    ClientSocket clientSocket;
 };
 
 #endif // EMPLOYEE_H
