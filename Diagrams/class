@@ -1,0 +1,216 @@
+@startuml
+
+class Admin {
+  +void displayAdminLandingPage()
+  +void AddEmployee()
+  +void RemoveEmployee()
+  +void AddMenuItem()
+  +void RemoveMenuItem()
+  +string getEmployeeDetails()
+  +string getMenuItemDetails()
+  +string getItemName()
+  +double getCostPrice()
+  +double getSellingPrice()
+  +bool getAvailabilityStatus()
+  +int getFoodType()
+  +int getSpiceLevel()
+  +int getCuisineType()
+  +bool getIsSweet()
+}
+
+class Chef {
+  -string logged_username
+  +int getRecommendationCount()
+  +string getItemIdForRollout()
+  +string getMealTypeForRollout()
+  +void displayRecommendations(int count)
+  +void sendRolloutRequest(const std::string& item_id, const std::string& meal_type)
+  +void displayChefLandingPage()
+  +void RolloutNextDayMenu()
+  +void viewNextDayVotes()
+}
+
+class ClientSocket {
+  -ClientSocket instance
+  -int port
+  -int clientSocket
+  -sockaddr_in serverAddress
+  +void sendMessage(string message)
+  +string receiveMessage()
+  +void createSocket()
+  +void connectToServer()
+}
+
+class Employee {
+  -string logged_username
+  +int getDietPreference()
+  +int getSpiceLevel()
+  +int getPreferredCuisine()
+  +int getSweetPreference()
+  +string getVoteId()
+  +string getRatings()
+  +string getComment()
+  +void displayEmployeeLandingPage()
+  +void updateProfile()
+  +void getUserProfileDetails()
+  +void giveVote()
+  +void giveFeedback()
+  +void getNextDayMenu()
+  +void getUserVoteList()
+  +void getRecommendationToUser()
+}
+
+class User {
+  -UserDTO user_dto
+  +string getInput()
+  +bool isValidDate(string date)
+  +void displayMenuItems()
+  +string userLogin()
+  +string getFeedbackDetails()
+  +void updateUserProfile()
+  +void displayUserProfile()
+}
+
+class Utils {
+  +string generateHash(string input)
+  +string encryptData(string data)
+  +string decryptData(string encryptedData)
+}
+
+class RequestType {
+  +int requestType
+}
+
+class ResponseType {
+  +int responseType
+}
+
+class SocketProtocol {
+  +int protocolType
+  +string protocolMessage
+}
+
+class UserDTO {
+  +string username
+  +string password
+  +string firstName
+  +string lastName
+  +string email
+}
+
+class ClientRequestManager {
+  +void handleRequest()
+  +string parseRequest(string request)
+}
+
+class RecommendationDTO {
+  +string itemId
+  +string mealType
+  +int recommendationScore
+}
+
+class RecommendationEngine {
+  +string getRecommendations(string userId)
+}
+
+class SentimentAnalyzer {
+  +string analyzeSentiment(string text)
+}
+
+class ServerManager {
+  +int port
+  +bool start()
+  +SocketRequest parseSocketRequest(string message)
+  +void acceptConnection()
+  +string handleClientRequest(string request)
+}
+
+class ServerSocket {
+  -int serverSocket
+  -int requestSocket
+  -sockaddr_in socketAddress
+  -int socketAddressLength
+  -int port
+  +void acceptConnection()
+  +void sendMessage(string message)
+  +string receiveMessage()
+  +void createSocket()
+  +void bindSocket()
+  +void listenSocket()
+  +SocketRequest parseMessage(string message)
+}
+
+class DatabaseManager {
+  +bool executeUpdate(string query)
+  +void connect()
+  +void disconnect()
+}
+
+class FeedbackDBManager {
+  -DatabaseManager dbManager
+  +bool addFeedback(string feedback)
+}
+
+class MenuDBManager {
+  -DatabaseManager dbManager
+  +bool addMenuItem(string item)
+  +bool removeMenuItem(string itemId)
+  +string getItemName(string itemId)
+}
+
+class NotificationDBManager {
+  -DatabaseManager dbManager
+  -UserDBManager userDBManager
+  +string fetchNotification(string userId)
+  +bool addNotificationToAll(string notification)
+  +bool addNotificationToEmployees(string notification)
+}
+
+class RollOutDBManager {
+  -DatabaseManager dbManager
+  +bool rolloutMenu(string menu)
+  +string getRolloutMenu()
+  +string generateReport()
+}
+
+class UserDBManager {
+  -DatabaseManager dbManager
+  +bool addUser(UserDTO user)
+  +bool removeUser(string userId)
+  +string getFirstName(string userId)
+  +string getLastName(string userId)
+  +string getEmployeeId(string userId)
+  +string getUserType(string userId)
+  +string getUserProfile(string userId)
+  +bool updateUserProfile(UserDTO user)
+}
+
+class VoteDBManager {
+  -DatabaseManager dbManager
+  +bool voteMenu(string vote)
+  +string getVotes(string menuId)
+  +string getUserVoteList(string userId)
+}
+
+' Relationships
+Admin --> User
+Chef --> Employee
+ClientSocket --> ServerSocket
+Employee --> User
+User --> UserDTO
+ClientRequestManager --> RequestType
+ClientRequestManager --> ResponseType
+ClientRequestManager --> SocketProtocol
+RecommendationEngine --> RecommendationDTO
+SentimentAnalyzer --> FeedbackDBManager
+ServerManager --> ServerSocket
+ServerManager --> ClientRequestManager
+FeedbackDBManager --> DatabaseManager
+MenuDBManager --> DatabaseManager
+NotificationDBManager --> DatabaseManager
+NotificationDBManager --> UserDBManager
+RollOutDBManager --> DatabaseManager
+UserDBManager --> DatabaseManager
+VoteDBManager --> DatabaseManager
+
+@enduml
